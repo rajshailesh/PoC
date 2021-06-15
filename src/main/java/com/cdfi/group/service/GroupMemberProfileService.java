@@ -5,6 +5,7 @@ import com.cdfi.group.domain.SHGProfile;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -20,12 +21,13 @@ import java.util.logging.Logger;
 @Service
 @Path("/group")
 public class GroupMemberProfileService {
-    private static final Logger logger = Logger.getLogger(UserEndpoint.class.getName());
+    private static final Logger logger = Logger.getLogger(GroupMemberProfileService.class.getName());
 
     @POST
 
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json")
+    @RolesAllowed("Admin")
     public Response uploadProfile(@FormDataParam("shgProfile") SHGProfile shgProfile,
                                   @FormDataParam("file") List<InputStream> files,
                                   @Context HttpHeaders headers) {

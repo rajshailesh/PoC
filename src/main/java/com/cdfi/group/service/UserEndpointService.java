@@ -1,7 +1,7 @@
 package com.cdfi.group.service;
 
 import com.cdfi.group.filter.JWTTokenNeeded;
-import com.cdfi.group.model.UsersMaster;
+import com.cdfi.group.model.UsersMasterEntity;
 import com.cdfi.group.util.KeyGenerator;
 import com.cdfi.group.util.PasswordUtils;
 import io.jsonwebtoken.Jwts;
@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.math.BigInteger;
@@ -29,7 +30,7 @@ import java.util.logging.Logger;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Transactional
-public class UserEndpoint {
+public class UserEndpointService {
 
 
 // ======================================
@@ -42,7 +43,7 @@ public class UserEndpoint {
     @Inject
     KeyGenerator keyGenerator;
 
-    private static final Logger logger = Logger.getLogger(UserEndpoint.class.getName());
+    private static final Logger logger = Logger.getLogger(UserEndpointService.class.getName());
 
     @PersistenceContext
     private EntityManager em;
@@ -55,8 +56,8 @@ public class UserEndpoint {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces("application/json")
-    public Response authenticateUser(@FormParam("login") String login,
-                                     @FormParam("password") String password) {
+    public Response authenticateUser(@NotNull @FormParam("login") String login,
+                                     @NotNull @FormParam("password") String password) {
 
         try {
 
@@ -77,11 +78,11 @@ public class UserEndpoint {
     }
 
     private void authenticate(String login, String password) {
-        TypedQuery<UsersMaster> query = em.createNamedQuery(UsersMaster.FIND_BY_LOGIN_PASSWORD, UsersMaster.class);
+        TypedQuery<UsersMasterEntity> query = em.createNamedQuery(UsersMasterEntity.FIND_BY_LOGIN_PASSWORD, UsersMasterEntity.class);
         query.setParameter("login", login);
         //query.setParameter("password", password.getBytes(StandardCharsets.UTF_8)/*PasswordUtils.encodeBase64(password)*/);
         query.setParameter("password", PasswordUtils.digestPassword(password).getBytes(StandardCharsets.UTF_8));
-        UsersMaster user = query.getSingleResult();
+        UsersMasterEntity user = query.getSingleResult();
 
         if (user == null)
             throw new SecurityException("Invalid user/password");
@@ -103,7 +104,7 @@ public class UserEndpoint {
 
     @POST
     @Consumes("application/json")
-    public Response create(UsersMaster user) {
+    public Response create(UsersMasterEntity user) {
         user.setPassword(PasswordUtils.digestPassword(new String(user.getPassword())));
         em.persist(user);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(user.getId().toString()).build()).build();
@@ -113,7 +114,7 @@ public class UserEndpoint {
     @Path("/{id}")
     @JWTTokenNeeded
     public Response findById(@PathParam("id") BigInteger id) {
-        UsersMaster user = em.find(UsersMaster.class, id);
+        UsersMasterEntity user = em.find(UsersMasterEntity.class, id);
 
         if (user == null)
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -123,8 +124,8 @@ public class UserEndpoint {
 
     @GET
     public Response findAllUsers() {
-        TypedQuery<UsersMaster> query = em.createNamedQuery(UsersMaster.FIND_ALL, UsersMaster.class);
-        List<UsersMaster> allUsers = query.getResultList();
+        TypedQuery<UsersMasterEntity> query = em.createNamedQuery(UsersMasterEntity.FIND_ALL, UsersMasterEntity.class);
+        List<UsersMasterEntity> allUsers = query.getResultList();
 
         if (allUsers == null)
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -135,7 +136,7 @@ public class UserEndpoint {
     @DELETE
     @Path("/{id}")
     public Response remove(@PathParam("id") String id) {
-        em.remove(em.getReference(UsersMaster.class, id));
+        em.remove(em.getReference(UsersMasterEntity.class, id));
         return Response.noContent().build();
     }
 

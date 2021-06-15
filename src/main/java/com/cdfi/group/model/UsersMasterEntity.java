@@ -12,20 +12,21 @@ import java.util.Objects;
 @Entity
 @Table(name = "users_master")
 @NamedQueries({
-        @NamedQuery(name = "UsersMaster.findAll", query = "SELECT u FROM UsersMaster u ORDER BY u.login DESC"),
-        @NamedQuery(name = "UsersMaster.findByLoginAndPassword", query = "SELECT u FROM UsersMaster u WHERE u.login = :login AND u.password = :password"),
-        @NamedQuery(name = "UsersMaster.countAll", query = "SELECT COUNT(u) FROM UsersMaster u")
+        @NamedQuery(name = "UsersMasterEntity.findAll", query = "SELECT u FROM UsersMasterEntity u ORDER BY u.login DESC"),
+        @NamedQuery(name = "UsersMasterEntity.findByLoginAndPassword", query = "SELECT u FROM UsersMasterEntity u WHERE u.login = :login AND u.password = :password"),
+        @NamedQuery(name = "UsersMasterEntity.countAll", query = "SELECT COUNT(u) FROM UsersMasterEntity u")
 })
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class UsersMaster {
+
+public class UsersMasterEntity {
     // ======================================
     // =             Constants              =
     // ======================================
 
-    public static final String FIND_ALL = "UsersMaster.findAll";
-    public static final String COUNT_ALL = "UsersMaster.countAll";
-    public static final String FIND_BY_LOGIN_PASSWORD = "UsersMaster.findByLoginAndPassword";
+    public static final String FIND_ALL = "UsersMasterEntity.findAll";
+    public static final String COUNT_ALL = "UsersMasterEntity.countAll";
+    public static final String FIND_BY_LOGIN_PASSWORD = "UsersMasterEntity.findByLoginAndPassword";
 
     @Id
     private BigInteger id;
@@ -38,11 +39,11 @@ public class UsersMaster {
     // =            Constructors            =
     // ======================================
 
-    public UsersMaster() {
+    public UsersMasterEntity() {
 
     }
 
-    public UsersMaster(BigInteger id, String login, String password) {
+    public UsersMasterEntity(BigInteger id, String login, String password) {
         this.id = id;
         this.login = login;
         this.password = Base64.getEncoder().encode(password.getBytes(StandardCharsets.UTF_8));
@@ -80,7 +81,7 @@ public class UsersMaster {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UsersMaster user = (UsersMaster) o;
+        UsersMasterEntity user = (UsersMasterEntity) o;
         return Objects.equals(id, user.id);
     }
 

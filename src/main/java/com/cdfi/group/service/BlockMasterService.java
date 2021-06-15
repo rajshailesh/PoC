@@ -4,16 +4,16 @@ import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
 
 import com.cdfi.group.filter.JWTTokenNeeded;
-import com.cdfi.group.model.BlockMaster;
+import com.cdfi.group.model.BlockMasterEntity;
 import com.cdfi.group.repository.BlockMasterRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,17 +36,18 @@ public class BlockMasterService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Iterable<BlockMaster> getBlockMaster() {
+    public Iterable<BlockMasterEntity> getBlockMaster() {
 
 	    return blockMasterRepository.findAll();
     }
-	@GET
+	@RolesAllowed("SHG Bookkeeper")
+    @GET
     @Path("jwt/{id}")
     @Produces("application/json")
     @JWTTokenNeeded
     public Response getBlockMasterById(@PathParam("id") BigInteger id) throws URISyntaxException
     {
-        Optional<BlockMaster> bm = blockMasterRepository.findById(id);
+        Optional<BlockMasterEntity> bm = blockMasterRepository.findById(id);
         if(bm == null) {
             return Response.status(404).build();
         }
