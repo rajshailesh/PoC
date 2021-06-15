@@ -6,7 +6,6 @@ import com.cdfi.group.util.KeyGenerator;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
-
 import javax.annotation.Priority;
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
@@ -23,8 +22,6 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.security.Key;
 import java.util.*;
@@ -56,14 +53,20 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
 
 
     public static final String USER = "User";
+    public static final String TENANT = "X-Tenant-Identifier";
+
     private static final Logger logger = Logger.getLogger(UserEndpointService.class.getName());
+
+    public JWTTokenNeededFilter() {
+    }
 
     // ======================================
     // =          Business methods          =
     // ======================================
 
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
+        Optional<String> opt = Optional.ofNullable("name");
 
         Method method = resourceInfo.getResourceMethod();
         if (!method.isAnnotationPresent(PermitAll.class)) {
@@ -100,18 +103,17 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
             //Verify user access
             if (method.isAnnotationPresent(RolesAllowed.class)) {
                 RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
-                Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
+                Set<String> rolesSet = new HashSet<>(Arrays.asList(rolesAnnotation.value()));
                 String user = requestContext.getHeaderString(USER);
-                if (!isUserAllowed(token, user, rolesSet)) {
+                if (!isUserAllowed(user, rolesSet)) {
                     requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
                             .entity("You cannot access this resource").build());
-                    return;
                 }
             }
         }
     }
 
-    private boolean isUserAllowed(final String token, final String user, final Set<String> rolesSet) {
+    private boolean isUserAllowed(final String user, final Set<String> rolesSet) {
         TypedQuery<RoleMasterEntity> query
                 = em.createQuery(
                 "SELECT urm.roleMasterEntity FROM UsersRoleRightsMapEntity urm WHERE urm.userId = :user_id", RoleMasterEntity.class);
@@ -125,9 +127,9 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
              ) {
             if (rolesSet.contains(rm.getRoleName())) {
                 isAllowed = true;
+                break;
             }
         }
-
         return isAllowed;
     }
 
