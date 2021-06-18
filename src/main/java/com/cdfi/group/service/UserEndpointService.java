@@ -73,7 +73,7 @@ public class UserEndpointService {
             return Response.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
 
         } catch (Exception e) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).build();
         }
     }
 

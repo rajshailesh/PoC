@@ -1,6 +1,5 @@
 package com.cdfi.group.filter;
 
-import com.cdfi.group.model.RoleMasterEntity;
 import com.cdfi.group.service.UserEndpointService;
 import com.cdfi.group.util.KeyGenerator;
 import io.jsonwebtoken.Jwts;
@@ -24,7 +23,10 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import java.lang.reflect.Method;
 import java.security.Key;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 
@@ -66,7 +68,24 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
-        Optional<String> opt = Optional.ofNullable("name");
+
+        // Get the HTTP Authorization header from the request
+        String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+        String user = requestContext.getHeaderString(USER);
+        String tenant = requestContext.getHeaderString(TENANT);
+        logger.info("#### authorizationHeader : " + authorizationHeader);
+
+        // Check if the HTTP Authorization header is present and formatted correctly
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            logger.info("#### invalid authorizationHeader : " + authorizationHeader);
+            throw new NotAuthorizedException("Authorization header must be provided");
+        } else if (user == null ){
+            logger.info(String.format("%s header is missing ", USER));
+            throw new NotAuthorizedException(String.format("%s header must be provided ", USER));
+        }  else if (tenant == null ) {
+            logger.info(String.format("%s header is missing ", TENANT));
+            throw new NotAuthorizedException(String.format("%s header must be provided ", TENANT));
+        }
 
         Method method = resourceInfo.getResourceMethod();
         if (!method.isAnnotationPresent(PermitAll.class)) {
@@ -75,15 +94,6 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
                 requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
                         .entity("Access blocked for all users !!").build());
                 return;
-            }
-            // Get the HTTP Authorization header from the request
-            String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-            logger.info("#### authorizationHeader : " + authorizationHeader);
-
-            // Check if the HTTP Authorization header is present and formatted correctly
-            if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-                logger.info("#### invalid authorizationHeader : " + authorizationHeader);
-                throw new NotAuthorizedException("Authorization header must be provided");
             }
 
             // Extract the token from the HTTP Authorization header
@@ -104,7 +114,6 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
             if (method.isAnnotationPresent(RolesAllowed.class)) {
                 RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
                 Set<String> rolesSet = new HashSet<>(Arrays.asList(rolesAnnotation.value()));
-                String user = requestContext.getHeaderString(USER);
                 if (!isUserAllowed(user, rolesSet)) {
                     requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
                             .entity("You cannot access this resource").build());
@@ -114,18 +123,18 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
     }
 
     private boolean isUserAllowed(final String user, final Set<String> rolesSet) {
-        TypedQuery<RoleMasterEntity> query
+        TypedQuery<String> query
                 = em.createQuery(
-                "SELECT urm.roleMasterEntity FROM UsersRoleRightsMapEntity urm WHERE urm.userId = :user_id", RoleMasterEntity.class);
+                "SELECT rm.roleName FROM RoleMasterEntity rm join UsersRoleRightsMapEntity urm on rm.roleId = urm.roleId and urm.userId = :user_id", String.class);
         query.setParameter("user_id", user);
-        List<RoleMasterEntity> resultList = query.getResultList();
+        List<String> resultList = query.getResultList();
         logger.info("roles" + resultList);
 
         boolean isAllowed = false;
 
-        for (RoleMasterEntity rm: resultList
+        for (String rm: resultList
              ) {
-            if (rolesSet.contains(rm.getRoleName())) {
+            if (rolesSet.contains(rm)) {
                 isAllowed = true;
                 break;
             }

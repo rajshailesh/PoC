@@ -1,8 +1,9 @@
 package com.cdfi.group.service;
 
-import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.util.Optional;
+import com.cdfi.group.filter.JWTTokenNeeded;
+import com.cdfi.group.model.BlockMasterEntity;
+import com.cdfi.group.repository.BlockMasterRepository;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
@@ -11,11 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import com.cdfi.group.filter.JWTTokenNeeded;
-import com.cdfi.group.model.BlockMasterEntity;
-import com.cdfi.group.repository.BlockMasterRepository;
-import org.springframework.stereotype.Service;
+import java.math.BigInteger;
+import java.util.Optional;
 
 
 @Service
@@ -40,15 +38,14 @@ public class BlockMasterService {
 
 	    return blockMasterRepository.findAll();
     }
-	@RolesAllowed("SHG Bookkeeper")
+	@RolesAllowed({"SHG Bookkeeper", "VPRP CRP"})
     @GET
     @Path("jwt/{id}")
     @Produces("application/json")
     @JWTTokenNeeded
-    public Response getBlockMasterById(@PathParam("id") BigInteger id) throws URISyntaxException
-    {
+    public Response getBlockMasterById(@PathParam("id") BigInteger id) {
         Optional<BlockMasterEntity> bm = blockMasterRepository.findById(id);
-        if(bm == null) {
+        if(!bm.isPresent()) {
             return Response.status(404).build();
         }
         return Response

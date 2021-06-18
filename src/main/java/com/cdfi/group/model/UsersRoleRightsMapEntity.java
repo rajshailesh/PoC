@@ -53,9 +53,6 @@ public class UsersRoleRightsMapEntity {
   @Column(name = "village_id")
   private String villageId;
 
-  @ManyToOne
-  private RoleMasterEntity roleMasterEntity;
-
   public Long getId() {
     return id;
   }

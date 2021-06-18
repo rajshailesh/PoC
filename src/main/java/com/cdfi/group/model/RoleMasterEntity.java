@@ -54,11 +54,6 @@ public class RoleMasterEntity {
   @Column(name = "created_by", nullable = false)
   private String createdBy;
 
-  @OneToMany()
-  @JoinColumn(name = "roleId", updatable = false, insertable = false)
-  private List<UsersRoleRightsMapEntity> roles;
-
-
   public RoleMasterEntity() {
     super();
   }
