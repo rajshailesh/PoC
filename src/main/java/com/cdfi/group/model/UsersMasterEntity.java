@@ -34,8 +34,11 @@ public class UsersMasterEntity {
     private String login;
     @Column(name = "passwordword")
     private byte[] password;
+    @Column(name = "status")
+    private String status;
 
-    // ======================================
+
+// ======================================
     // =            Constructors            =
     // ======================================
 
@@ -71,6 +74,14 @@ public class UsersMasterEntity {
 
     public void setPassword(String password) {
         this.password = password.getBytes(StandardCharsets.UTF_8);
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     // ======================================

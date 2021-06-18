@@ -1,5 +1,6 @@
 package com.cdfi.group.service;
 
+import com.cdfi.group.Error.InActiveException;
 import com.cdfi.group.filter.JWTTokenNeeded;
 import com.cdfi.group.model.UsersMasterEntity;
 import com.cdfi.group.util.KeyGenerator;
@@ -57,10 +58,12 @@ public class UserEndpointService {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces("application/json")
     public Response authenticateUser(@NotNull @FormParam("login") String login,
-                                     @NotNull @FormParam("password") String password) {
+                                     @NotNull @FormParam("password") String password,
+                                     @FormParam("grant_type") String grantType,
+                                     @FormParam("stateid") Integer stateId) {
 
         try {
-
+            // To add code for state_id and grant_type
             logger.info("#### login/password : " + login + "/" + password);
 
             // Authenticate the user using the credentials provided
@@ -72,20 +75,28 @@ public class UserEndpointService {
             // Return the token on the response
             return Response.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + token).build();
 
-        } catch (Exception e) {
+        } catch (SecurityException e) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).build();
+        }catch (InActiveException e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
         }
     }
 
     private void authenticate(String login, String password) {
+
         TypedQuery<UsersMasterEntity> query = em.createNamedQuery(UsersMasterEntity.FIND_BY_LOGIN_PASSWORD, UsersMasterEntity.class);
         query.setParameter("login", login);
         //query.setParameter("password", password.getBytes(StandardCharsets.UTF_8)/*PasswordUtils.encodeBase64(password)*/);
         query.setParameter("password", PasswordUtils.digestPassword(password).getBytes(StandardCharsets.UTF_8));
         UsersMasterEntity user = query.getSingleResult();
 
-        if (user == null)
+        if (user == null){
             throw new SecurityException("Invalid user/password");
+        }else if(user.getStatus() == null || user.getStatus().equals("0")){
+            throw new InActiveException("User " +login + " is INACTIVE. Please contact to administrator" );
+
+        }
+
     }
 
     private String issueToken(String login) {
