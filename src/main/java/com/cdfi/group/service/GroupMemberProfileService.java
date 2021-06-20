@@ -97,7 +97,7 @@ public class GroupMemberProfileService {
         }
         Gson gson = new Gson();
         String json = gson.toJson(shgProfile);
-        createJson(json, LookUpMasterEntity.shgLookupVal, shgProfile.getTransaction_id(),
+        createJson(json, shgProfile.getTransaction_id(),
                 userId, path);
 
         return Response.ok().entity("Message added to Mobile Queue : " + fileDetails).build();
@@ -110,13 +110,13 @@ public class GroupMemberProfileService {
             Files.copy(file, path, StandardCopyOption.REPLACE_EXISTING);
 
     }
-    private void createJson(String json, Short cboType, String transactionId, String userId,
+    private void createJson(String json, String transactionId, String userId,
                             String path){
         ProcessingJsonEntity processingJsonEntity = new ProcessingJsonEntity();
         processingJsonEntity.setId(BigInteger.valueOf(100000000));
         processingJsonEntity.setJson(json);
         processingJsonEntity.setCboType(LookUpMasterEntity.shgLookupVal);
-        processingJsonEntity.setFlag(processingJsonEntity.noReadFlag);
+        processingJsonEntity.setFlag(ProcessingJsonEntity.noReadFlag);
         processingJsonEntity.setCreatedDate(LocalDateTime.now());
         processingJsonEntity.setTransactionId(transactionId);
         processingJsonEntity.setFiles(path);
