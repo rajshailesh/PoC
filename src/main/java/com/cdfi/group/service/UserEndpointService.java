@@ -63,7 +63,8 @@ public class UserEndpointService {
                                      @FormParam("stateid") Integer stateId) {
 
         try {
-            // To add code for state_id and grant_type
+            // Added 2 param for grant_type and stateid as in existing implementation
+            // This is not required though
             logger.info("#### login/password : " + login + "/" + password);
 
             // Authenticate the user using the credentials provided
