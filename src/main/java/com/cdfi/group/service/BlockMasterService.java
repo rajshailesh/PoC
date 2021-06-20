@@ -17,8 +17,6 @@ import java.util.Optional;
 
 
 @Service
-//@XmlAccessorType(XmlAccessType.NONE)
-//@XmlRootElement(name = "users")
 @Path("/blockmaster")
 public class BlockMasterService {
 	

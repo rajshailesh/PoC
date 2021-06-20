@@ -1,5 +1,7 @@
 package com.cdfi.group.model;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "processing_json")
+@Data
 public class ProcessingJsonEntity {
     @Id
    // @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +41,7 @@ public class ProcessingJsonEntity {
     public static Short processingFlag=2;
     public static Short executedFlag=3;
 
-    public BigInteger getId() {
+    /*public BigInteger getId() {
         return id;
     }
 
@@ -116,5 +119,5 @@ public class ProcessingJsonEntity {
 
     public void setTransactionId(final String transactionId) {
         this.transactionId = transactionId;
-    }
+    }*/
 }

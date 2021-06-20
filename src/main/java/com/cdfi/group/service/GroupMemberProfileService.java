@@ -1,12 +1,21 @@
 package com.cdfi.group.service;
 
 import com.cdfi.group.domain.SHGProfile;
+import com.cdfi.group.model.LookUpMasterEntity;
+import com.cdfi.group.model.ProcessingJsonEntity;
+import com.cdfi.group.model.TransactionStatusEntity;
+import com.cdfi.group.repository.ProcessingJsonRepository;
+import com.cdfi.group.repository.TransactionStatusRepository;
+import com.google.gson.Gson;
 import org.glassfish.jersey.media.multipart.BodyPartEntity;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.security.RolesAllowed;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -18,18 +27,33 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
 @Service
 @Path("/group")
+@Transactional
 public class GroupMemberProfileService {
+    @PersistenceContext
+    private EntityManager em;
+
     private static final Logger logger = Logger.getLogger(GroupMemberProfileService.class.getName());
+    ProcessingJsonRepository processingJsonRepository;
+    TransactionStatusRepository transactionStatusRepository;
+
+
+    public GroupMemberProfileService(ProcessingJsonRepository processingJsonRepository,
+                                     TransactionStatusRepository transactionStatusRepository) {
+        this.processingJsonRepository = processingJsonRepository;
+        this.transactionStatusRepository = transactionStatusRepository;
+    }
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -39,8 +63,10 @@ public class GroupMemberProfileService {
                                   @FormDataParam("files") List<FormDataBodyPart> files,
                                   @Context HttpHeaders headers) {
 
+        String userId = headers.getHeaderString("User");
         logger.info("SHG Profile" + shgProfile.getShg_name());
-        shgProfile.setUploaded_by(headers.getHeaderString("User"));
+        shgProfile.setUploaded_by(userId);
+        shgProfile.setTransaction_id("2021052117143123");
         logger.info("SHG Profile" + shgProfile.getUploaded_by());
         StringBuilder fileDetails = new StringBuilder();
 
@@ -69,6 +95,10 @@ public class GroupMemberProfileService {
             }
             fileDetails.append(" File saved at ").append(path).append(":").append(fileName);
         }
+        Gson gson = new Gson();
+        String json = gson.toJson(shgProfile);
+        createJson(json, LookUpMasterEntity.shgLookupVal, shgProfile.getTransaction_id(),
+                userId, path);
 
         return Response.ok().entity("Message added to Mobile Queue : " + fileDetails).build();
     }
@@ -78,6 +108,30 @@ public class GroupMemberProfileService {
             java.nio.file.Path path = FileSystems.getDefault().getPath(dirPath + File.separator + name);
             /* Save InputStream as file */
             Files.copy(file, path, StandardCopyOption.REPLACE_EXISTING);
+
+    }
+    private void createJson(String json, Short cboType, String transactionId, String userId,
+                            String path){
+        ProcessingJsonEntity processingJsonEntity = new ProcessingJsonEntity();
+        processingJsonEntity.setId(BigInteger.valueOf(100000000));
+        processingJsonEntity.setJson(json);
+        processingJsonEntity.setCboType(LookUpMasterEntity.shgLookupVal);
+        processingJsonEntity.setFlag(processingJsonEntity.noReadFlag);
+        processingJsonEntity.setCreatedDate(LocalDateTime.now());
+        processingJsonEntity.setTransactionId(transactionId);
+        processingJsonEntity.setFiles(path);
+        em.persist(processingJsonEntity);
+
+        if(transactionId!=null) {
+            TransactionStatusEntity transactionStatusEntity =
+                    new TransactionStatusEntity();
+            transactionStatusEntity.setReadFlag(Boolean.FALSE);
+            transactionStatusEntity.setStatus(TransactionStatusEntity.pending);
+            transactionStatusEntity.setTransactionId(transactionId);
+            transactionStatusEntity.setUserId(userId);
+            em.persist(transactionStatusEntity);
+        }
+
 
     }
 }
