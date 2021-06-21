@@ -1,0 +1,848 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "type": "object",
+  "properties": {
+    "state_id": {
+      "type": "integer",
+	  "enum": [10, 32, 33]
+    },
+    "district_id": {
+      "type": "integer"
+    },
+    "block_id": {
+      "type": "integer"
+    },
+    "panchayat_id": {
+      "type": "integer"
+    },
+    "village_id": {
+      "type": "integer"
+    },
+    "hamlet_id": {
+      "type": "string",
+	  "maxLength": 30
+    },
+    "guid": {
+      "type": "string",
+	  "maxLength": 50
+    },
+    "shg_code": {
+      "type": "string",
+	  "maxLength": 22
+    },
+    "shg_name": {
+      "type": "string"
+    },
+    "composition": {
+      "type": "integer"
+    },
+    "shg_type_code": {
+      "type": "integer",
+	  "enum": [1, 2]
+    },
+    "language_id": {
+      "type": "string",
+	  "enum": ["", "EN", "HI"],
+	  "maxLength": 2
+    },
+    "shg_name_local": {
+      "type": "string",
+	  "maxLength": 120
+    },
+    "shg_name_short_en": {
+      "type": "string",
+	  "maxLength": 20
+    },
+    "shg_name_short_local": {
+      "type": "string",
+	  "maxLength": 40
+    },
+    "shg_formation_date": {
+      "type": "integer"
+    },
+    "shg_promoted_by": {
+      "type": "integer",
+	  "enum": [1, 2, 3]
+    },
+    
+    "meeting_frequency": {
+      "type": "integer",
+	  "enum": [0, 1, 2, 3]
+    },
+    
+    "mode": {
+      "type": "integer"
+    },
+    "month_comp_saving": {
+      "type": "integer"
+    },
+    
+    "interloaning_rate": {
+      "type": "number"
+    },
+    "savings_interest": {
+      "type": "number"
+    },
+    "voluntary_savings_interest": {
+      "type": "number"
+    },
+    
+    "entry_source": {
+      "type": "integer"
+    },
+    "is_edited": {
+      "type": "integer"
+    },
+    "grade": {
+      "type": "string",
+	  "maxLength" : 1
+    },
+    
+    "grade_confirmation_status": {
+      "type": "string",
+	  "maxLength" : 1
+    },
+    
+    "uploaded_by": {
+      "type": "string",
+	  "maxLength" : 100
+    },
+    "created_date": {
+      "type": "integer"
+    },
+    "created_by": {
+      "type": "string",
+	  "maxLength" : 100
+    },
+    "updated_date": {
+      "type": "integer"
+    },
+    "updated_by": {
+      "type": "string",
+	  "maxLength" : 100
+    },
+    
+    "bookkeeper_identified": {
+      "type": "integer",
+	  "enum": [1, 2, 3]
+    },
+    
+    "user_id": {
+      "type": "string",
+	  "maxLength" : 100
+    },
+    
+    "primary_activity": {
+      "type": "integer",
+	   "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 99]
+    },
+    "secondary_activity": {
+      "type": "integer",
+	  "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 99]
+    },
+    "tertiary_activity": {
+      "type": "integer",
+	  "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 99]
+    },
+    "promoter_name": {
+      "type": "string",
+	  "maxLength" : 50
+    },
+    "saving_frequency": {
+      "type": "integer",
+	  "enum": [1, 2, 3]
+    },
+    
+    "bookkeeper_name": {
+      "type": "string",
+	  "maxLength" : 60
+    },
+    "bookkeeper_mobile": {
+      "type": "string",
+	  "maxLength" : 10
+    },
+    
+    "status": {
+      "type": "integer",
+	  "enum": [0, 1, 2]
+    },
+    
+    "cboAddressesList": {
+      "type": "array",
+      "items": {}
+    },
+    "cboPhoneNoDetailsList": {
+      "type": "array",
+      "items": {}
+    },
+    "cboBankDetailsList": {
+      "type": "array",
+      "items": {}
+    },
+    
+    "memberProfileList": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "member_id": {
+              "type": "integer"
+            },
+            "member_code": {
+              "type": "integer"
+            },
+            "cbo_id": {
+              "type": "null"
+            },
+            "cbo_guid": {
+              "type": "string"
+            },
+            "member_guid": {
+              "type": "string"
+            },
+            "group_m_code": {
+              "type": "integer"
+            },
+            "seq_no": {
+              "type": "integer"
+            },
+            "member_name": {
+              "type": "string"
+            },
+            "member_name_local": {
+              "type": "string"
+            },
+            "father_husband": {
+              "type": "string"
+            },
+            "relation_name": {
+              "type": "string"
+            },
+            "relation_name_local": {
+              "type": "string"
+            },
+            "gender": {
+              "type": "integer"
+            },
+            "marital_status": {
+              "type": "integer"
+            },
+            "religion": {
+              "type": "integer"
+            },
+            "social_category": {
+              "type": "integer"
+            },
+            "tribal_category": {
+              "type": "integer"
+            },
+            "bpl": {
+              "type": "integer"
+            },
+            "bpl_number": {
+              "type": "string"
+            },
+            "pip_category": {
+              "type": "integer"
+            },
+            "pip_date": {
+              "type": "integer"
+            },
+            "highest_education_level": {
+              "type": "integer"
+            },
+            "dob_available": {
+              "type": "integer"
+            },
+            "dob": {
+              "type": "integer"
+            },
+            "age": {
+              "type": "integer"
+            },
+            "age_as_on": {
+              "type": "integer"
+            },
+            "minority": {
+              "type": "integer"
+            },
+            "is_disabled": {
+              "type": "integer"
+            },
+            "disability_details": {
+              "type": "string"
+            },
+            "wellbeing_category": {
+              "type": "integer"
+            },
+            "primary_occupation": {
+              "type": "integer"
+            },
+            "secondary_occupation": {
+              "type": "integer"
+            },
+            "tertiary_occupation": {
+              "type": "integer"
+            },
+            "joining_date": {
+              "type": "integer"
+            },
+            "leaving_date": {
+              "type": "integer"
+            },
+            "reason_for_leaving": {
+              "type": "integer"
+            },
+            "if_minor_member_replaced": {
+              "type": "string"
+            },
+            "guardian_name": {
+              "type": "string"
+            },
+            "guardian_name_local": {
+              "type": "string"
+            },
+            "guardian_relation": {
+              "type": "integer"
+            },
+            "designation": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "integer"
+            },
+            "house_hold_code": {
+              "type": "integer"
+            },
+            "head_house_hold": {
+              "type": "integer"
+            },
+            "insurance": {
+              "type": "integer"
+            },
+            "marked_as_defaulter": {
+              "type": "string"
+            },
+            "marked_as_defaulter_date": {
+              "type": "integer"
+            },
+            "record_modified": {
+              "type": "string"
+            },
+            "last_sync_date": {
+              "type": "integer"
+            },
+            "entry_source": {
+              "type": "integer"
+            },
+            "is_edited": {
+              "type": "integer"
+            },
+            "is_active": {
+              "type": "integer"
+            },
+            "settlement_status": {
+              "type": "integer"
+            },
+            "mem_activation_status": {
+              "type": "integer"
+            },
+            "mem_dedup_status": {
+              "type": "integer"
+            },
+            "uploaded_by": {
+              "type": "string"
+            },
+            "created_date": {
+              "type": "integer"
+            },
+            "uploaded_date": {
+              "type": "null"
+            },
+            "updated_date": {
+              "type": "integer"
+            },
+            "created_by": {
+              "type": "string"
+            },
+            "updated_by": {
+              "type": "string"
+            },
+            "shg_name": {
+              "type": "null"
+            },
+            "checker_remarks": {
+              "type": "null"
+            },
+            "member_image": {
+              "type": "null"
+            },
+            "approve_status": {
+              "type": "integer"
+            },
+            "memberAddressesList": {
+              "type": "array",
+              "items": {}
+            },
+            "memberBankList": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "member_bank_details_id": {
+                      "type": "null"
+                    },
+                    "bank_guid": {
+                      "type": "string"
+                    },
+                    "member_code": {
+                      "type": "integer"
+                    },
+                    "member_guid": {
+                      "type": "string"
+                    },
+                    "account_no": {
+                      "type": "string"
+                    },
+                    "bank_id": {
+                      "type": "integer"
+                    },
+                    "account_type": {
+                      "type": "integer"
+                    },
+                    "mem_branch_code": {
+                      "type": "string"
+                    },
+                    "ifsc_code": {
+                      "type": "string"
+                    },
+                    "account_open_date": {
+                      "type": "integer"
+                    },
+                    "is_default_account": {
+                      "type": "integer"
+                    },
+                    "status": {
+                      "type": "integer"
+                    },
+                    "closing_date": {
+                      "type": "integer"
+                    },
+                    "gl_code": {
+                      "type": "string"
+                    },
+                    "same_as_group": {
+                      "type": "null"
+                    },
+                    "entry_source": {
+                      "type": "integer"
+                    },
+                    "is_edited": {
+                      "type": "integer"
+                    },
+                    "is_active": {
+                      "type": "integer"
+                    },
+                    "updated_by": {
+                      "type": "string"
+                    },
+                    "created_by": {
+                      "type": "string"
+                    },
+                    "uploaded_by": {
+                      "type": "string"
+                    },
+                    "activation_status": {
+                      "type": "integer"
+                    },
+                    "dedupl_status": {
+                      "type": "integer"
+                    },
+                    "cbo_id": {
+                      "type": "integer"
+                    },
+                    "bank_passbook_name": {
+                      "type": "null"
+                    },
+                    "passbook_first_page": {
+                      "type": "null"
+                    },
+                    "created_date": {
+                      "type": "integer"
+                    },
+                    "uploaded_date": {
+                      "type": "null"
+                    },
+                    "updated_date": {
+                      "type": "integer"
+                    },
+                    "member_name": {
+                      "type": "null"
+                    },
+                    "member_bank_document": {
+                      "type": "null"
+                    }
+                  },
+                  "required": [
+                    "member_bank_details_id",
+                    "bank_guid",
+                    "member_code",
+                    "member_guid",
+                    "account_no",
+                    "bank_id",
+                    "account_type",
+                    "mem_branch_code",
+                    "ifsc_code",
+                    "account_open_date",
+                    "is_default_account",
+                    "status",
+                    "closing_date",
+                    "gl_code",
+                    "same_as_group",
+                    "entry_source",
+                    "is_edited",
+                    "is_active",
+                    "updated_by",
+                    "created_by",
+                    "uploaded_by",
+                    "activation_status",
+                    "dedupl_status",
+                    "cbo_id",
+                    "bank_passbook_name",
+                    "passbook_first_page",
+                    "created_date",
+                    "uploaded_date",
+                    "updated_date",
+                    "member_name",
+                    "member_bank_document"
+                  ]
+                }
+              ]
+            },
+            "memberKYCDetailsList": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "member_kyc_details_id": {
+                      "type": "null"
+                    },
+                    "kyc_guid": {
+                      "type": "string"
+                    },
+                    "member_guid": {
+                      "type": "string"
+                    },
+                    "member_code": {
+                      "type": "integer"
+                    },
+                    "kyc_type": {
+                      "type": "integer"
+                    },
+                    "kyc_number": {
+                      "type": "string"
+                    },
+                    "document_id": {
+                      "type": "null"
+                    },
+                    "kyc_valid_from": {
+                      "type": "null"
+                    },
+                    "kyc_valid_to": {
+                      "type": "null"
+                    },
+                    "status": {
+                      "type": "integer"
+                    },
+                    "entry_source": {
+                      "type": "integer"
+                    },
+                    "is_edited": {
+                      "type": "integer"
+                    },
+                    "is_active": {
+                      "type": "integer"
+                    },
+                    "uploaded_by": {
+                      "type": "string"
+                    },
+                    "created_by": {
+                      "type": "string"
+                    },
+                    "updated_by": {
+                      "type": "string"
+                    },
+                    "cbo_id": {
+                      "type": "integer"
+                    },
+                    "dedupl_status": {
+                      "type": "integer"
+                    },
+                    "activation_status": {
+                      "type": "integer"
+                    },
+                    "created_date": {
+                      "type": "integer"
+                    },
+                    "uploaded_date": {
+                      "type": "null"
+                    },
+                    "updated_date": {
+                      "type": "integer"
+                    },
+                    "documentDetails": {
+                      "type": "null"
+                    },
+                    "front_doc_original_name": {
+                      "type": "null"
+                    },
+                    "rear_doc_original_name": {
+                      "type": "null"
+                    }
+                  },
+                  "required": [
+                    "member_kyc_details_id",
+                    "kyc_guid",
+                    "member_guid",
+                    "member_code",
+                    "kyc_type",
+                    "kyc_number",
+                    "document_id",
+                    "kyc_valid_from",
+                    "kyc_valid_to",
+                    "status",
+                    "entry_source",
+                    "is_edited",
+                    "is_active",
+                    "uploaded_by",
+                    "created_by",
+                    "updated_by",
+                    "cbo_id",
+                    "dedupl_status",
+                    "activation_status",
+                    "created_date",
+                    "uploaded_date",
+                    "updated_date",
+                    "documentDetails",
+                    "front_doc_original_name",
+                    "rear_doc_original_name"
+                  ]
+                }
+              ]
+            },
+            "memberPhoneNoDetailsList": {
+              "type": "array",
+              "items": {}
+            },
+            "memberSystemTagsList": {
+              "type": "array",
+              "items": {}
+            }
+          },
+          "required": [
+            "member_id",
+            "member_code",
+            "cbo_id",
+            "cbo_guid",
+            "member_guid",
+            "group_m_code",
+            "seq_no",
+            "member_name",
+            "member_name_local",
+            "father_husband",
+            "relation_name",
+            "relation_name_local",
+            "gender",
+            "marital_status",
+            "religion",
+            "social_category",
+            "tribal_category",
+            "bpl",
+            "bpl_number",
+            "pip_category",
+            "pip_date",
+            "highest_education_level",
+            "dob_available",
+            "dob",
+            "age",
+            "age_as_on",
+            "minority",
+            "is_disabled",
+            "disability_details",
+            "wellbeing_category",
+            "primary_occupation",
+            "secondary_occupation",
+            "tertiary_occupation",
+            "joining_date",
+            "leaving_date",
+            "reason_for_leaving",
+            "if_minor_member_replaced",
+            "guardian_name",
+            "guardian_name_local",
+            "guardian_relation",
+            "designation",
+            "status",
+            "house_hold_code",
+            "head_house_hold",
+            "insurance",
+            "marked_as_defaulter",
+            "marked_as_defaulter_date",
+            "record_modified",
+            "last_sync_date",
+            "entry_source",
+            "is_edited",
+            "is_active",
+            "settlement_status",
+            "mem_activation_status",
+            "mem_dedup_status",
+            "uploaded_by",
+            "created_date",
+            "uploaded_date",
+            "updated_date",
+            "created_by",
+            "updated_by",
+            "shg_name",
+            "checker_remarks",
+            "member_image",
+            "approve_status",
+            "memberAddressesList",
+            "memberBankList",
+            "memberKYCDetailsList",
+            "memberPhoneNoDetailsList",
+            "memberSystemTagsList"
+          ]
+        }
+      ]
+    },
+    "cboSystemTagsList": {
+      "type": "array",
+      "items": {}
+    },
+    "shg_cooption_date": {
+      "type": "integer"
+    },
+    "tags": {
+      "type": "integer"
+    },
+    "federation_code": {
+      "type": "null"
+    },
+    "federation_name": {
+      "type": "null"
+    },
+    "federation_name_local": {
+      "type": "null"
+    },
+    "child_level": {
+      "type": "null"
+    },
+    "member_count": {
+      "type": "null"
+    },
+    "dedup_member_count": {
+      "type": "null"
+    },
+    "active_member_count": {
+      "type": "null"
+    },
+    "approve_status": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "state_id",
+    "district_id",
+    "block_id",
+    "panchayat_id",
+    "village_id",
+    "hamlet_id",
+    "guid",
+    "shg_code",
+    "shg_name",
+    "composition",
+    "shg_type_code",
+    "language_id",
+    "shg_name_local",
+    "shg_name_short_en",
+    "shg_name_short_local",
+    "shg_formation_date",
+    "shg_revival_date",
+    "shg_promoted_by",
+    "shg_revived_by",
+    "meeting_frequency",
+    "meeting_frequency_value",
+    "meeting_on",
+    "mode",
+    "month_comp_saving",
+    "panelty_non_saving",
+    "interloaning_rate",
+    "savings_interest",
+    "voluntary_savings_interest",
+    "is_bankaccount",
+    "funding_agency_id",
+    "parent_cbo_code",
+    "parent_cbo_type",
+    "is_active",
+    "dedupl_status",
+    "activation_status",
+    "entry_source",
+    "mobile_default_user",
+    "web_default_checker",
+    "is_edited",
+    "account_books_maintained",
+    "cash_book_start_date",
+    "bank_book_start_date",
+    "members_ledger_start_date",
+    "book4",
+    "book5",
+    "grade",
+    "grading_done_on",
+    "grade_confirmation_status",
+    "last_uploaded_date",
+    "uploaded_by",
+    "created_date",
+    "created_by",
+    "updated_date",
+    "updated_by",
+    "latitude",
+    "longitude",
+    "bookkeeper_identified",
+    "micro_plan_prepared",
+    "user_id",
+    "basic_shg_training",
+    "primary_activity",
+    "secondary_activity",
+    "tertiary_activity",
+    "promoter_name",
+    "saving_frequency",
+    "volutary_saving",
+    "cbo_level",
+    "geographic_level",
+    "settlement_status",
+    "bookkeeper_name",
+    "bookkeeper_mobile",
+    "election_tenure",
+    "is_voluntary_saving",
+    "status",
+    "checker_remark",
+    "cboAddressesList",
+    "cboPhoneNoDetailsList",
+    "cboBankDetailsList",
+    "cboKYCDetails",
+    "memberProfileList",
+    "cboSystemTagsList",
+    "shg_cooption_date",
+    "tags",
+    "federation_code",
+    "federation_name",
+    "federation_name_local",
+    "child_level",
+    "member_count",
+    "dedup_member_count",
+    "active_member_count",
+    "approve_status"
+  ]
+}

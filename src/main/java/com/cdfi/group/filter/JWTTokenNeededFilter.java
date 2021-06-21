@@ -2,6 +2,8 @@ package com.cdfi.group.filter;
 
 import com.cdfi.group.service.UserEndpointService;
 import com.cdfi.group.util.KeyGenerator;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
@@ -103,7 +105,10 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
 
                 // Validate the token
                 Key key = keyGenerator.generateKey();
-                Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+                Jws<Claims> jwt = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+                if(!user.equals(jwt.getBody().getSubject())){
+                    requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("Passed token belongs to other user").build());
+                }
                 logger.info("#### valid token : " + token);
 
             } catch (Exception e) {

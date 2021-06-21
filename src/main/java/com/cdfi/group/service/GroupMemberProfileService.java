@@ -1,12 +1,21 @@
 package com.cdfi.group.service;
 
 import com.cdfi.group.domain.SHGProfile;
+import com.cdfi.group.filter.JWTTokenNeeded;
+import com.cdfi.group.model.CircularQueuePointerEntity;
 import com.cdfi.group.model.LookUpMasterEntity;
 import com.cdfi.group.model.ProcessingJsonEntity;
 import com.cdfi.group.model.TransactionStatusEntity;
+import com.cdfi.group.repository.CircularQueuePointerRepository;
 import com.cdfi.group.repository.ProcessingJsonRepository;
 import com.cdfi.group.repository.TransactionStatusRepository;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion;
+import com.networknt.schema.ValidationMessage;
 import org.glassfish.jersey.media.multipart.BodyPartEntity;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -24,6 +33,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +45,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @Service
@@ -47,21 +59,33 @@ public class GroupMemberProfileService {
     private static final Logger logger = Logger.getLogger(GroupMemberProfileService.class.getName());
     ProcessingJsonRepository processingJsonRepository;
     TransactionStatusRepository transactionStatusRepository;
+    CircularQueuePointerRepository circularQueuePointerRepository;
 
 
     public GroupMemberProfileService(ProcessingJsonRepository processingJsonRepository,
-                                     TransactionStatusRepository transactionStatusRepository) {
+                                     TransactionStatusRepository transactionStatusRepository,
+                                     CircularQueuePointerRepository circularQueuePointerRepository) {
         this.processingJsonRepository = processingJsonRepository;
         this.transactionStatusRepository = transactionStatusRepository;
+        this.circularQueuePointerRepository = circularQueuePointerRepository;
     }
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json")
-    @RolesAllowed("Admin")
+    @RolesAllowed({"SHG Bookkeeper", "VPRP CRP"})
+    @JWTTokenNeeded
     public Response uploadProfile(@FormDataParam("shgProfile") SHGProfile shgProfile,
                                   @FormDataParam("files") List<FormDataBodyPart> files,
-                                  @Context HttpHeaders headers) {
+                                  @Context HttpHeaders headers) throws JsonProcessingException {
+        ObjectMapper Obj = new ObjectMapper();
+
+        String strJson =  Obj.writeValueAsString(shgProfile); ;
+        try {
+            validateJson(strJson);
+        } catch (IOException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
 
         String userId = headers.getHeaderString("User");
         logger.info("SHG Profile" + shgProfile.getShg_name());
@@ -95,9 +119,8 @@ public class GroupMemberProfileService {
             }
             fileDetails.append(" File saved at ").append(path).append(":").append(fileName);
         }
-        Gson gson = new Gson();
-        String json = gson.toJson(shgProfile);
-        createJson(json, shgProfile.getTransaction_id(),
+
+        createJson(strJson, shgProfile.getTransaction_id(),
                 userId, path);
 
         return Response.ok().entity("Message added to Mobile Queue : " + fileDetails).build();
@@ -113,7 +136,7 @@ public class GroupMemberProfileService {
     private void createJson(String json, String transactionId, String userId,
                             String path){
         ProcessingJsonEntity processingJsonEntity = new ProcessingJsonEntity();
-        processingJsonEntity.setId(BigInteger.valueOf(100000000));
+        setIdInProcessingJsonEntity(processingJsonEntity);
         processingJsonEntity.setJson(json);
         processingJsonEntity.setCboType(LookUpMasterEntity.shgLookupVal);
         processingJsonEntity.setFlag(ProcessingJsonEntity.noReadFlag);
@@ -131,7 +154,60 @@ public class GroupMemberProfileService {
             transactionStatusEntity.setUserId(userId);
             em.persist(transactionStatusEntity);
         }
+    }
+    private Response validateJson(String strJson) throws IOException {
+        InputStream jsonStream = new ByteArrayInputStream(strJson.getBytes());
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream schemaStream = classLoader.getResourceAsStream("group-profile-json-schema.json");
+        // create instance of the ObjectMapper class
+        ObjectMapper objectMapper = new ObjectMapper();
+        // create an instance of the JsonSchemaFactory using version flag
+        JsonSchemaFactory schemaFactory = JsonSchemaFactory.getInstance( SpecVersion.VersionFlag.V201909 );
+        // read data from the stream and store it into JsonNode
+        JsonNode json = objectMapper.readTree(jsonStream);
 
+        // get schema from the schemaStream and store it into JsonSchema
+        JsonSchema schema = schemaFactory.getSchema(schemaStream);
+
+        // create set of validation message and store result in it
+        Set<ValidationMessage> validationResult = schema.validate( json );
+        if(!validationResult.isEmpty()){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(validationResult).build();
+        }else{
+            return Response.ok().build();
+        }
+
+    }
+    private void setIdInProcessingJsonEntity(ProcessingJsonEntity processingJsonEntity){
+        Optional<CircularQueuePointerEntity> circularQueuePointerEntity =  circularQueuePointerRepository.findById(1);
+        BigInteger front = circularQueuePointerEntity.get().getFront();
+        BigInteger rear = circularQueuePointerEntity.get().getRear();
+        BigInteger capacity = circularQueuePointerEntity.get().getCapacity();
+        BigInteger zeroBigInteger = new BigInteger("0");
+        BigInteger oneBigInteger = new BigInteger("1");
+
+
+        //ENQUEUE
+        if(front.equals(zeroBigInteger) && rear.equals(zeroBigInteger))   // condition to check queue is empty
+        {
+            front=oneBigInteger;
+            rear=oneBigInteger;
+            processingJsonEntity.setId(front);
+        }
+        else if((rear.add(oneBigInteger)).mod(capacity).equals(front) ) // condition to check queue is full
+        {
+            front=oneBigInteger;
+            rear=oneBigInteger;
+            processingJsonEntity.setId(front);
+            logger.info("Queue is overflow,Resetting Queue");
+        }
+        else
+        {
+            rear=(rear).mod(capacity);       // rear is incremented
+            processingJsonEntity.setId(rear.add(oneBigInteger));
+            circularQueuePointerEntity.get().setRear(rear.add(oneBigInteger));
+
+        }
 
     }
 }
