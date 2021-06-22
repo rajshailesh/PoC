@@ -1,11 +1,12 @@
 package com.cdfi.group.service;
 
+import com.cdfi.group.Error.DataNotFoundException;
+import com.cdfi.group.Error.JsonValidationError;
 import com.cdfi.group.domain.SHGProfile;
 import com.cdfi.group.filter.JWTTokenNeeded;
 import com.cdfi.group.model.CircularQueuePointerEntity;
 import com.cdfi.group.model.LookUpMasterEntity;
 import com.cdfi.group.model.ProcessingJsonEntity;
-import com.cdfi.group.model.TransactionStatusEntity;
 import com.cdfi.group.repository.CircularQueuePointerRepository;
 import com.cdfi.group.repository.ProcessingJsonRepository;
 import com.cdfi.group.repository.TransactionStatusRepository;
@@ -77,27 +78,34 @@ public class GroupMemberProfileService {
     @JWTTokenNeeded
     public Response uploadProfile(@FormDataParam("shgProfile") SHGProfile shgProfile,
                                   @FormDataParam("files") List<FormDataBodyPart> files,
-                                  @Context HttpHeaders headers) throws JsonProcessingException {
+                                  @Context HttpHeaders headers) throws JsonProcessingException, JsonValidationError {
         ObjectMapper Obj = new ObjectMapper();
 
-        String strJson =  Obj.writeValueAsString(shgProfile); ;
+        String strJson =  Obj.writeValueAsString(shgProfile);
         try {
-            validateJson(strJson);
+            Set<ValidationMessage> validationMessages = validateJson(strJson);
+            if(!validationMessages.isEmpty()){
+                StringBuilder sb = new StringBuilder();
+                for (ValidationMessage val : validationMessages) {
+                    sb.append(val).append(",");
+                }
+                return Response.status(Response.Status.EXPECTATION_FAILED).entity("Json has validation error " + sb).build();
+            }
         } catch (IOException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            return Response.status(Response.Status.EXPECTATION_FAILED).entity(e.getMessage()).build();
         }
 
         String userId = headers.getHeaderString("User");
-        logger.info("SHG Profile" + shgProfile.getShg_name());
+        logger.info("SHG Name: " + shgProfile.getShg_name());
         shgProfile.setUploaded_by(userId);
-        shgProfile.setTransaction_id("2021052117143123");
-        logger.info("SHG Profile" + shgProfile.getUploaded_by());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSS");
+        String strDate = formatter.format(new Date());
+        // Following line will be commented as calling program will set transaction id in Json
+        shgProfile.setTransaction_id(strDate);
+        logger.info("SHG Profile Uploaded By: " + shgProfile.getUploaded_by());
         StringBuilder fileDetails = new StringBuilder();
 
         /* Save multiple files */
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy-hh-mm-ss");
-        Date date = new Date();
-        String strDate = formatter.format(date);
         String defaultBaseDir = System.getProperty("java.io.tmpdir");
         String path = defaultBaseDir.concat(strDate);
         for (FormDataBodyPart bodyPart : files){
@@ -121,7 +129,7 @@ public class GroupMemberProfileService {
         }
 
         createJson(strJson, shgProfile.getTransaction_id(),
-                userId, path);
+                path);
 
         return Response.ok().entity("Message added to Mobile Queue : " + fileDetails).build();
     }
@@ -133,8 +141,8 @@ public class GroupMemberProfileService {
             Files.copy(file, path, StandardCopyOption.REPLACE_EXISTING);
 
     }
-    private void createJson(String json, String transactionId, String userId,
-                            String path){
+    private void createJson(String json, String transactionId,
+                            String path) throws DataNotFoundException {
         ProcessingJsonEntity processingJsonEntity = new ProcessingJsonEntity();
         setIdInProcessingJsonEntity(processingJsonEntity);
         processingJsonEntity.setJson(json);
@@ -145,17 +153,8 @@ public class GroupMemberProfileService {
         processingJsonEntity.setFiles(path);
         em.persist(processingJsonEntity);
 
-        if(transactionId!=null) {
-            TransactionStatusEntity transactionStatusEntity =
-                    new TransactionStatusEntity();
-            transactionStatusEntity.setReadFlag(Boolean.FALSE);
-            transactionStatusEntity.setStatus(TransactionStatusEntity.pending);
-            transactionStatusEntity.setTransactionId(transactionId);
-            transactionStatusEntity.setUserId(userId);
-            em.persist(transactionStatusEntity);
-        }
     }
-    private Response validateJson(String strJson) throws IOException {
+    private Set<ValidationMessage> validateJson(String strJson) throws IOException {
         InputStream jsonStream = new ByteArrayInputStream(strJson.getBytes());
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream schemaStream = classLoader.getResourceAsStream("group-profile-json-schema.json");
@@ -170,19 +169,19 @@ public class GroupMemberProfileService {
         JsonSchema schema = schemaFactory.getSchema(schemaStream);
 
         // create set of validation message and store result in it
-        Set<ValidationMessage> validationResult = schema.validate( json );
-        if(!validationResult.isEmpty()){
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(validationResult).build();
-        }else{
-            return Response.ok().build();
-        }
-
+        return schema.validate( json );
     }
-    private void setIdInProcessingJsonEntity(ProcessingJsonEntity processingJsonEntity){
-        Optional<CircularQueuePointerEntity> circularQueuePointerEntity =  circularQueuePointerRepository.findById(1);
-        BigInteger front = circularQueuePointerEntity.get().getFront();
-        BigInteger rear = circularQueuePointerEntity.get().getRear();
-        BigInteger capacity = circularQueuePointerEntity.get().getCapacity();
+    private void setIdInProcessingJsonEntity(ProcessingJsonEntity processingJsonEntity) throws DataNotFoundException {
+        Optional<CircularQueuePointerEntity> circularQueuePointer =  circularQueuePointerRepository.findById(1);
+        CircularQueuePointerEntity circularQueuePointerEntity;
+        if(circularQueuePointer.isPresent()){
+            circularQueuePointerEntity = circularQueuePointer.get();
+        }else {
+            throw new DataNotFoundException("No record found in CircularQueuePointerEntity");
+        }
+        BigInteger front = circularQueuePointerEntity.getFront();
+        BigInteger rear = circularQueuePointerEntity.getRear();
+        BigInteger capacity = circularQueuePointerEntity.getCapacity();
         BigInteger zeroBigInteger = new BigInteger("0");
         BigInteger oneBigInteger = new BigInteger("1");
 
@@ -190,24 +189,22 @@ public class GroupMemberProfileService {
         //ENQUEUE
         if(front.equals(zeroBigInteger) && rear.equals(zeroBigInteger))   // condition to check queue is empty
         {
-            front=oneBigInteger;
-            rear=oneBigInteger;
             processingJsonEntity.setId(front);
         }
         else if((rear.add(oneBigInteger)).mod(capacity).equals(front) ) // condition to check queue is full
         {
-            front=oneBigInteger;
             rear=oneBigInteger;
             processingJsonEntity.setId(front);
+            circularQueuePointerEntity.setRear(rear);
             logger.info("Queue is overflow,Resetting Queue");
         }
         else
         {
             rear=(rear).mod(capacity);       // rear is incremented
             processingJsonEntity.setId(rear.add(oneBigInteger));
-            circularQueuePointerEntity.get().setRear(rear.add(oneBigInteger));
-
+            circularQueuePointerEntity.setRear(rear.add(oneBigInteger));
         }
+        em.persist(circularQueuePointerEntity);
 
     }
 }

@@ -106,7 +106,7 @@ public class UserEndpointService {
                 .setSubject(login)
                 .setIssuer(uriInfo.getAbsolutePath().toString())
                 .setIssuedAt(new Date())
-                .setExpiration(toDate(LocalDateTime.now().plusMinutes(15L)))
+                .setExpiration(toDate(LocalDateTime.now().plusMinutes(1440L)))
                 .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
         logger.info("#### generating token for a key : " + jwtToken + " - " + key);
