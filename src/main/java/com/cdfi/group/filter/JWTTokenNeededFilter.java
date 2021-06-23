@@ -1,5 +1,7 @@
 package com.cdfi.group.filter;
 
+import com.cdfi.group.model.AccessRightsEntity;
+import com.cdfi.group.model.RoleMasterEntity;
 import com.cdfi.group.service.UserEndpointService;
 import com.cdfi.group.util.KeyGenerator;
 import io.jsonwebtoken.Claims;
@@ -119,7 +121,7 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
             if (method.isAnnotationPresent(RolesAllowed.class)) {
                 RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
                 Set<String> rolesSet = new HashSet<>(Arrays.asList(rolesAnnotation.value()));
-                if (!isUserAllowed(user, rolesSet)) {
+                if (!isUserAllowed(user, rolesSet, requestContext)) {
                     requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
                             .entity("You cannot access this resource").build());
                 }
@@ -127,19 +129,30 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
         }
     }
 
-    private boolean isUserAllowed(final String user, final Set<String> rolesSet) {
-        TypedQuery<String> query
+    private boolean isUserAllowed(final String user, final Set<String> rolesSet, ContainerRequestContext context) {
+        context.getUriInfo().getPath().contains("");
+        TypedQuery<RoleMasterEntity> query
                 = em.createQuery(
-                "SELECT rm.roleName FROM RoleMasterEntity rm join UsersRoleRightsMapEntity urm on rm.roleId = urm.roleId and urm.userId = :user_id", String.class);
+                "SELECT rm FROM RoleMasterEntity rm join UsersRoleRightsMapEntity urm on rm.roleId = urm.roleId and urm.userId = :user_id", RoleMasterEntity.class);
+        TypedQuery<AccessRightsEntity> queryAccessRights
+                = em.createQuery(
+                "SELECT am FROM AccessRightsEntity am WHERE am.roleId = :roleId", AccessRightsEntity.class);
         query.setParameter("user_id", user);
-        List<String> resultList = query.getResultList();
+        List<RoleMasterEntity> resultList = query.getResultList();
         logger.info("roles" + resultList);
 
+        AccessRightsEntity access;
+        List<AccessRightsEntity> resultListForAccess;
+        for (RoleMasterEntity rm: resultList ) {
+            queryAccessRights.setParameter("roleId", rm.getRoleId());
+            resultListForAccess = queryAccessRights.getResultList();
+            break;
+            }
         boolean isAllowed = false;
 
-        for (String rm: resultList
+        for (RoleMasterEntity rm: resultList
              ) {
-            if (rolesSet.contains(rm)) {
+            if (rolesSet.contains(rm.getRoleName())) {
                 isAllowed = true;
                 break;
             }
