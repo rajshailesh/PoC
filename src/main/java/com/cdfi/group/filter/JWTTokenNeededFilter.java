@@ -141,13 +141,16 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
         List<RoleMasterEntity> resultList = query.getResultList();
         logger.info("roles" + resultList);
 
-        AccessRightsEntity access;
-        List<AccessRightsEntity> resultListForAccess;
+        String access;
+        List<AccessRightsEntity> resultListForAccess = null;
         for (RoleMasterEntity rm: resultList ) {
             queryAccessRights.setParameter("roleId", rm.getRoleId());
             resultListForAccess = queryAccessRights.getResultList();
             break;
             }
+        for(AccessRightsEntity accessRightsEntity: resultListForAccess){
+            access = accessRightsEntity.getRights();
+        }
         boolean isAllowed = false;
 
         for (RoleMasterEntity rm: resultList

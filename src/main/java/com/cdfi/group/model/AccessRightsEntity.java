@@ -19,4 +19,12 @@ public class AccessRightsEntity {
     private String functionalId;
     @Column(name = "rights")
     private String rights;
+
+    public String getRights() {
+        return rights;
+    }
+
+    public void setRights(String rights) {
+        this.rights = rights;
+    }
 }

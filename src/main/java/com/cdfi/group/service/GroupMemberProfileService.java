@@ -10,6 +10,8 @@ import com.cdfi.group.model.ProcessingJsonEntity;
 import com.cdfi.group.repository.CircularQueuePointerRepository;
 import com.cdfi.group.repository.ProcessingJsonRepository;
 import com.cdfi.group.repository.TransactionStatusRepository;
+import com.cdfi.group.util.CopyFileTask;
+import com.cdfi.group.util.ParallelTasks;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,8 +42,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -107,7 +107,9 @@ public class GroupMemberProfileService {
 
         /* Save multiple files */
         String defaultBaseDir = System.getProperty("java.io.tmpdir");
-        String path = defaultBaseDir.concat(strDate);
+        String targetPath = defaultBaseDir.concat(strDate);
+        ParallelTasks tasks = new ParallelTasks();
+        java.nio.file.Path path;
         for (FormDataBodyPart bodyPart : files){
             /*
              * Casting FormDataBodyPart to BodyPartEntity, which can give us
@@ -116,31 +118,27 @@ public class GroupMemberProfileService {
             BodyPartEntity bodyPartEntity = (BodyPartEntity) bodyPart.getEntity();
             String fileName = bodyPart.getContentDisposition().getFileName();
 
-            try {
-                File file = new File(path);
-                if(!file.exists() && !file.mkdirs()){
-                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unable to copy file on File System at " + path).build();
-                }
-                saveFile(bodyPartEntity.getInputStream(), fileName, path);
-            } catch (IOException e) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+            File file = new File(targetPath);
+            if(!file.exists() && !file.mkdirs()){
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Unable to copy file on File System at " + targetPath).build();
             }
-            fileDetails.append(" File saved at ").append(path).append(":").append(fileName);
+            path = FileSystems.getDefault().getPath(targetPath + File.separator + fileName);
+            tasks.add(new CopyFileTask(bodyPartEntity.getInputStream(), path));
+
+            fileDetails.append(" File saved at ").append(targetPath).append(":").append(fileName);
+        }
+        try {
+            tasks.go();
+        } catch (InterruptedException e) {
+            return Response.status(Response.Status.EXPECTATION_FAILED).entity(e.getMessage()).build();
         }
 
         createJson(strJson, shgProfile.getTransaction_id(),
-                path);
+                targetPath);
 
         return Response.ok().entity("Message added to Mobile Queue : " + fileDetails).build();
     }
-    private void saveFile(InputStream file, String name, String dirPath) throws IOException {
 
-        /* Change directory path */
-            java.nio.file.Path path = FileSystems.getDefault().getPath(dirPath + File.separator + name);
-            /* Save InputStream as file */
-            Files.copy(file, path, StandardCopyOption.REPLACE_EXISTING);
-
-    }
     private void createJson(String json, String transactionId,
                             String path) throws DataNotFoundException {
         ProcessingJsonEntity processingJsonEntity = new ProcessingJsonEntity();
