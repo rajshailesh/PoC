@@ -7,9 +7,6 @@ import com.cdfi.group.filter.JWTTokenNeeded;
 import com.cdfi.group.model.CircularQueuePointerEntity;
 import com.cdfi.group.model.LookUpMasterEntity;
 import com.cdfi.group.model.ProcessingJsonEntity;
-import com.cdfi.group.repository.CircularQueuePointerRepository;
-import com.cdfi.group.repository.ProcessingJsonRepository;
-import com.cdfi.group.repository.TransactionStatusRepository;
 import com.cdfi.group.util.CopyFileTask;
 import com.cdfi.group.util.ParallelTasks;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,30 +43,18 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
 @Service
-@Path("/group")
+@Path("/group-v1/mobile/upload")
 @Transactional
 public class GroupMemberProfileService {
     @PersistenceContext
     private EntityManager em;
 
     private static final Logger logger = Logger.getLogger(GroupMemberProfileService.class.getName());
-    ProcessingJsonRepository processingJsonRepository;
-    TransactionStatusRepository transactionStatusRepository;
-    CircularQueuePointerRepository circularQueuePointerRepository;
 
-
-    public GroupMemberProfileService(ProcessingJsonRepository processingJsonRepository,
-                                     TransactionStatusRepository transactionStatusRepository,
-                                     CircularQueuePointerRepository circularQueuePointerRepository) {
-        this.processingJsonRepository = processingJsonRepository;
-        this.transactionStatusRepository = transactionStatusRepository;
-        this.circularQueuePointerRepository = circularQueuePointerRepository;
-    }
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -170,16 +155,14 @@ public class GroupMemberProfileService {
         return schema.validate( json );
     }
     private void setIdInProcessingJsonEntity(ProcessingJsonEntity processingJsonEntity) throws DataNotFoundException {
-        Optional<CircularQueuePointerEntity> circularQueuePointer =  circularQueuePointerRepository.findById(1);
-        CircularQueuePointerEntity circularQueuePointerEntity;
-        if(circularQueuePointer.isPresent()){
-            circularQueuePointerEntity = circularQueuePointer.get();
-        }else {
+        CircularQueuePointerEntity circularQueuePointer =  em.find(CircularQueuePointerEntity.class, 1);
+
+        if(circularQueuePointer == null) {
             throw new DataNotFoundException("No record found in CircularQueuePointerEntity");
         }
-        BigInteger front = circularQueuePointerEntity.getFront();
-        BigInteger rear = circularQueuePointerEntity.getRear();
-        BigInteger capacity = circularQueuePointerEntity.getCapacity();
+        BigInteger front = circularQueuePointer.getFront();
+        BigInteger rear = circularQueuePointer.getRear();
+        BigInteger capacity = circularQueuePointer.getCapacity();
         BigInteger zeroBigInteger = new BigInteger("0");
         BigInteger oneBigInteger = new BigInteger("1");
 
@@ -193,16 +176,16 @@ public class GroupMemberProfileService {
         {
             rear=oneBigInteger;
             processingJsonEntity.setId(front);
-            circularQueuePointerEntity.setRear(rear);
+            circularQueuePointer.setRear(rear);
             logger.info("Queue is overflow,Resetting Queue");
         }
         else
         {
             rear=(rear).mod(capacity);       // rear is incremented
             processingJsonEntity.setId(rear.add(oneBigInteger));
-            circularQueuePointerEntity.setRear(rear.add(oneBigInteger));
+            circularQueuePointer.setRear(rear.add(oneBigInteger));
         }
-        em.persist(circularQueuePointerEntity);
+        em.persist(circularQueuePointer);
 
     }
 }
