@@ -12,9 +12,6 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Priority;
-import javax.annotation.security.DenyAll;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,9 +24,10 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
-import java.lang.reflect.Method;
 import java.security.Key;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -91,14 +89,6 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
             throw new NotAuthorizedException(String.format("%s header must be provided ", TENANT));
         }
 
-        Method method = resourceInfo.getResourceMethod();
-        if (!method.isAnnotationPresent(PermitAll.class)) {
-            //Access denied for all
-            if (method.isAnnotationPresent(DenyAll.class)) {
-                requestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
-                        .entity("Access blocked for all users !!").build());
-                return;
-            }
 
             // Extract the token from the HTTP Authorization header
             String token = authorizationHeader.substring("Bearer".length()).trim();
@@ -117,19 +107,15 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
                 logger.info("#### invalid token : " + token);
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             }
-            //Verify user access
-            if (method.isAnnotationPresent(RolesAllowed.class)) {
-                RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
-                Set<String> rolesSet = new HashSet<>(Arrays.asList(rolesAnnotation.value()));
-                if (!isUserAllowed(user, rolesSet, requestContext)) {
-                    requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                            .entity("You cannot access this resource").build());
-                }
-            }
+        if (!isUserAllowed(user, requestContext)) {
+            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("You cannot access this resource").build());
         }
+
+
     }
 
-    private boolean isUserAllowed(final String user, final Set<String> rolesSet, ContainerRequestContext context) {
+    private boolean isUserAllowed(final String user, ContainerRequestContext context) {
 
         TypedQuery<RoleMasterEntity> query
                 = em.createQuery(
