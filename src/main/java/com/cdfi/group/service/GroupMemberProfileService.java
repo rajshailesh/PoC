@@ -21,7 +21,6 @@ import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -59,7 +58,6 @@ public class GroupMemberProfileService {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json")
-    @RolesAllowed({"SHG Bookkeeper", "VPRP CRP"})
     @JWTTokenNeeded
     public Response uploadProfile(@FormDataParam("shgProfile") SHGProfile shgProfile,
                                   @FormDataParam("files") List<FormDataBodyPart> files,

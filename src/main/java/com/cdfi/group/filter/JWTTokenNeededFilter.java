@@ -147,17 +147,19 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
 
         String access = null;
         List<AccessRightsEntity> resultListForAccess = null;
-        List<PermittableGroupsEntity> resultListForPermissions = null;
+        List<PermittableGroupsEntity> resultListForPermissions;
         List<String> listPermittables = new ArrayList<>();
         for (RoleMasterEntity rm: resultList ) {
             queryAccessRights.setParameter("roleId", rm.getRoleId());
             resultListForAccess = queryAccessRights.getResultList();
             break;
             }
+        assert resultListForAccess != null;
         for(AccessRightsEntity accessRightsEntity: resultListForAccess){
             access = accessRightsEntity.getRights();
             break;
         }
+        assert access != null;
         HashMap<String, List<String>> map = Utility.getListFromString("permittableGroupIdentifier", access, DELIMETER);
         queryPermittableGroups.setParameter("permittableGroupId", map.get("permittableGroupIdentifier"));
         //queryPermittableGroups.setParameter("permittableGroupId", "shg_group");
@@ -176,14 +178,6 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
                 break;
             }
         }
-        // Commenting as we are externalizing method level permission through DB
-        /*for (RoleMasterEntity rm: resultList
-             ) {
-            if (rolesSet.contains(rm.getRoleName())) {
-                isAllowed = true;
-                break;
-            }
-        }*/
         return isAllowed;
     }
 
