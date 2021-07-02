@@ -10,6 +10,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -22,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -87,8 +89,9 @@ public class UserEndpointService {
 
         TypedQuery<UsersMasterEntity> query = em.createNamedQuery(UsersMasterEntity.FIND_BY_LOGIN_PASSWORD, UsersMasterEntity.class);
         query.setParameter("login", login);
-        //query.setParameter("password", password.getBytes(StandardCharsets.UTF_8)/*PasswordUtils.encodeBase64(password)*/);
+
         query.setParameter("password", PasswordUtils.digestPassword(password).getBytes(StandardCharsets.UTF_8));
+        //query.setParameter("password", Base64.getEncoder().encode(PasswordUtils.digestPassword(password).getBytes(StandardCharsets.UTF_8)));
         UsersMasterEntity user = query.getSingleResult();
 
         if (user == null){
@@ -117,8 +120,13 @@ public class UserEndpointService {
     @POST
     @Consumes("application/json")
     public Response create(UsersMasterEntity user) {
-        user.setPassword(PasswordUtils.digestPassword(new String(user.getPassword())));
-        em.persist(user);
+        user.setPassword(PasswordUtils.digestPassword(new String(Base64.getEncoder().encode(user.getPassword()))));
+        try{
+            em.persist(user);
+        }catch(EntityExistsException e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+
         return Response.created(uriInfo.getAbsolutePathBuilder().path(user.getId().toString()).build()).build();
     }
 

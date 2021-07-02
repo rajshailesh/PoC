@@ -2,7 +2,6 @@ package com.cdfi.group.util;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.Base64;
 
 public class PasswordUtils {
 
@@ -15,7 +14,8 @@ public class PasswordUtils {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(plainTextPassword.getBytes(StandardCharsets.UTF_8));
             byte[] passwordDigest = md.digest();
-            return new String(Base64.getEncoder().encode(passwordDigest));
+            //return new String(Base64.getEncoder().encode(passwordDigest));
+            return new String(passwordDigest);
           } catch (Exception e) {
             throw new RuntimeException("Exception encoding password", e);
         }
