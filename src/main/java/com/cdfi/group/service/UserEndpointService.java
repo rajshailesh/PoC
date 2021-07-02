@@ -10,10 +10,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -123,7 +120,7 @@ public class UserEndpointService {
         user.setPassword(PasswordUtils.digestPassword(new String(Base64.getEncoder().encode(user.getPassword()))));
         try{
             em.persist(user);
-        }catch(EntityExistsException e){
+        }catch(Exception e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
 
@@ -155,8 +152,13 @@ public class UserEndpointService {
 
     @DELETE
     @Path("/{id}")
-    public Response remove(@PathParam("id") String id) {
-        em.remove(em.getReference(UsersMasterEntity.class, id));
+    public Response remove(@PathParam("id") BigInteger id) {
+        try{
+            em.remove(em.getReference(UsersMasterEntity.class, id));
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+
         return Response.noContent().build();
     }
 
