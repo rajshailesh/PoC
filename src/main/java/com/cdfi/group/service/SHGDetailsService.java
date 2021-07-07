@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 @Service
 @Transactional
+@Path("/group-v1/mobile/downloadShg/{id}")
 public class SHGDetailsService {
     @PersistenceContext
     private EntityManager em;
@@ -43,11 +44,10 @@ public class SHGDetailsService {
     SHGDesignationRepository shgDesignationRepository;
 
     @GET
-    @Consumes(MediaType.TEXT_PLAIN)
+    //@Consumes(org.springframework.http.MediaType.ALL_VALUE)
     @Produces(MediaType.APPLICATION_JSON)
     @JWTTokenNeeded
-    @Path("/group-v1/mobile/downloadShg/{id}")
-    public Response shgDetails(@NotNull @PathParam("username") Integer id) {
+    public Response shgDetails(@NotNull @PathParam("id") BigInteger id) {
         SHGProfile shgProfile = null;
         SHGProfileEntity shgProfileEntity = em.find(SHGProfileEntity.class, id);
         if (shgProfileEntity == null) {

@@ -3,6 +3,7 @@ package com.cdfi.group.config;
 import com.cdfi.group.filter.JWTTokenNeededFilter;
 import com.cdfi.group.service.BlockMasterService;
 import com.cdfi.group.service.GroupMemberProfileService;
+import com.cdfi.group.service.SHGDetailsService;
 import com.cdfi.group.service.UserEndpointService;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -18,5 +19,6 @@ public class JerseyConfig extends ResourceConfig {
         register(JWTTokenNeededFilter. class);
         register(GroupMemberProfileService.class);
         register(MultiPartFeature.class);
+        register(SHGDetailsService.class);
     }
 }

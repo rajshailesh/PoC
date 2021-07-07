@@ -9,10 +9,10 @@ import javax.persistence.*;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
 @Entity
 @Table(name = "funding_agency_master")
 public class FundingAgencyMasterEntity {
