@@ -4,11 +4,12 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
+
 @Data
 public class SystemTags {
 
     private BigInteger systemtags_id;
-   // @NotBlank(message = "system_tag_guid cannot be empty")
+    // @NotBlank(message = "system_tag_guid cannot be empty")
     private String system_tag_guid;
     private String cbo_guid;
 
@@ -32,4 +33,5 @@ public class SystemTags {
     @NotNull(message = "Created Date Must be Given")
     private Integer created_date;
     private Integer updated_date;
+    private Integer is_complete;
 }

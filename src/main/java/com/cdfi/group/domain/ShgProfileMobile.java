@@ -1,15 +1,10 @@
 package com.cdfi.group.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.math.BigInteger;
-import java.util.List;
-
-@Getter
-@Setter
-public class SHGProfile {
-
+@Data
+public class ShgProfileMobile {
     private BigInteger shg_id;
     private Integer state_id;
     private Integer district_id;
@@ -65,14 +60,14 @@ public class SHGProfile {
     private String created_by;
     private Integer updated_date;
     private String updated_by;
-    private Double latitude;
+    private  Double latitude;
     private Double longitude;
     private Short bookkeeper_identified;
     private Short micro_plan_prepared;
     private String user_id;
     private Integer basic_shg_training;
     private Integer primary_activity;
-    private Integer secondary_activity;
+    private Integer secondary_ctivity;
     private Integer tertiary_activity;
     private String promoter_name;
     private Short saving_frequency;
@@ -83,48 +78,14 @@ public class SHGProfile {
     private String bookkeeper_name;
     private String bookkeeper_mobile;
     private Integer election_tenure;
-    private Short is_voluntary_saving;
     private Short status;
+    private Short is_voluntary_saving;
     private String checker_remark;
-    private List<CBOAddresses> cboAddressesList;
-    private List<CBOPhoneNoDetails> cboPhoneNoDetailsList;
-    private List<CBOBankDetails> cboBankDetailsList;
-    private CboKYCDetails cboKYCDetails;
-    private List<MemberProfile> memberProfileList;
-
-    private List<SystemTags> cboSystemTagsList;
-
-    private List<SHGDesignation> shgDesignationList;
-
-    private Integer shg_cooption_date;
-    private Short tags;
-
-    //FEDERATION
-    private BigInteger federation_code;
-    private String federation_name;
-    private String federation_name_local;
-    private Short child_level;
-
-    private Long member_count;
-    private Long dedup_member_count;
-    private Long active_member_count;
-    private String transaction_id;
-
     private Short approve_status;
-
-    public static String exceptionString;
-
     private String view_status;
 
-    private Integer mapped_date;
-    private Integer unmapped_date;
-    private Integer federation_joining_date;
-    private String shg_resolution;
-    private String shg_resolution_document;
-
-
-    private String shg_type_other;
-    private String promoter_code;
+    private  String shg_type_other;
+    private  String promoter_code;
     private Integer is_verified;
     private Integer is_complete;
 

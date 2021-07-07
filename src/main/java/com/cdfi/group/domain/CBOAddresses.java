@@ -1,9 +1,7 @@
 package com.cdfi.group.domain;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 @Data
 public class CBOAddresses {
@@ -36,5 +34,7 @@ public class CBOAddresses {
     private Integer updated_date;
     private String updated_by;
     private Short is_active;
+    private Integer is_verified;
+    private Integer is_complete;
 
 }

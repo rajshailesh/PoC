@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -29,7 +30,7 @@ public class BlockMasterService {
     @Path("jwt/{id}")
     @Produces("application/json")
     @JWTTokenNeeded
-    public Response getBlockMasterById(@PathParam("id") BigInteger id) {
+    public Response getBlockMasterById(@NotNull @PathParam("id") BigInteger id) {
         BlockMasterEntity bm = em.find(BlockMasterEntity.class, id);
         if(bm == null) {
             return Response.status(404).build();

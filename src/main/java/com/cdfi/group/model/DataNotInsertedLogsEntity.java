@@ -13,26 +13,20 @@ import java.math.BigInteger;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "transaction_status")
-public class TransactionStatusEntity {
-
+@Table(name = "data_not_inserted_logs")
+public class DataNotInsertedLogsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private BigInteger id;
-    @Column(name = "transaction_id")
-    private String transactionId;
-    @Column(name = "status")
-    private Short status;
+    @Column(name = "guid")
+    private String guid;
+    @Column(name = "remarks")
+    private String remarks;
     @Column(name = "user_id")
     private String userId;
     @Column(name = "read_flag")
     private Boolean readFlag;
-    @Column(name = "remarks")
-    private String remarks;
 
-    public static Short pending=1;
-    public static Short success=2;
-    public static Short failure=3;
 
 }

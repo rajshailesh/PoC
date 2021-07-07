@@ -42,7 +42,7 @@ public class GroupMemberProfileServiceTest {
 
         MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
         map.add("login", "sraj1");
-        map.add("password", "pwd");
+        map.add("password", "password");
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity( uri, request, String.class );

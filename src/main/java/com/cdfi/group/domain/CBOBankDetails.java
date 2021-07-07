@@ -1,9 +1,7 @@
 package com.cdfi.group.domain;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 @Data
 public class CBOBankDetails {
@@ -42,5 +40,7 @@ public class CBOBankDetails {
     private String bank_document;
     private String identify_duplicate;
     private Short npci_status;
+    private Integer is_verified;
+    private Integer is_complete;
 
 }

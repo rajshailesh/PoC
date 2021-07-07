@@ -2,7 +2,6 @@ package com.cdfi.group.domain;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 @Data
 public class CBOPhoneNoDetails {
@@ -32,4 +31,8 @@ public class CBOPhoneNoDetails {
     private String updated_by;
     private String member_guid;
     private String member_name;
+    private String identified_duplicates;
+
+    private Integer is_verified;
+    private Integer is_complete;
 }

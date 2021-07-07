@@ -2,16 +2,14 @@ package com.cdfi.group.domain;
 
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
+
 @Data
 public class CboKYCDetails {
 
     private BigInteger cbo_kyc_details_id;
-    private  String cbo_guid;
+    private String cbo_guid;
     private String kyc_guid;
     private BigInteger cbo_id;
     private Integer kyc_type;
@@ -34,5 +32,7 @@ public class CboKYCDetails {
     private Short is_active;
     private Short cbo_type;
     private String kyc_document;
+    private Integer is_verified;
+    private Integer is_complete;
 
 }
