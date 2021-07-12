@@ -3,8 +3,10 @@ package com.cdfi.group.service;
 import com.cdfi.group.domain.*;
 import com.cdfi.group.filter.JWTTokenNeeded;
 import com.cdfi.group.mapper.GroupMapper;
+import com.cdfi.group.mapper.MemberMapper;
 import com.cdfi.group.model.*;
 import com.cdfi.group.repository.*;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +14,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.math.BigInteger;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -42,7 +48,18 @@ public class SHGDetailsService {
     SystemTagsRepository systemTagsRepository;
     @Autowired
     SHGDesignationRepository shgDesignationRepository;
+    @Autowired
+    MemberAddressesDetailsRepository memberAddressesDetailsRepository;
+    @Autowired
+    MemberBankDetailsRepository memberBankDetailsRepository;
+    @Autowired
+    MemberKYCDetailsRepository memberKYCDetailsRepository;
+    @Autowired
+    MemberPhoneNoDetailsRepository memberPhoneNoDetailsRepository;
+    @Autowired
+    MemberSystemTagsRepository memberSystemTagsRepository;
 
+    @SneakyThrows
     @GET
     //@Consumes(org.springframework.http.MediaType.ALL_VALUE)
     @Produces(MediaType.APPLICATION_JSON)
@@ -53,20 +70,20 @@ public class SHGDetailsService {
         if (shgProfileEntity == null) {
             return javax.ws.rs.core.Response.status(404).build();
         }
-        if (shgProfileEntity.getIsActive()) {
+        if (shgProfileEntity.getIs_active()) {
             shgProfile = GroupMapper.map(shgProfileEntity);
-            if (shgProfileEntity.getParentCboId() != null) {
-                FederationProfileEntity federationProfileEntity = em.find(FederationProfileEntity.class, shgProfileEntity.getParentCboId());
+            if (shgProfileEntity.getParent_cbo_code() != null) {
+                FederationProfileEntity federationProfileEntity = em.find(FederationProfileEntity.class, shgProfileEntity.getParent_cbo_code());
                 if (federationProfileEntity != null) {
                     shgProfile.setFederation_name(federationProfileEntity.getFederationName());
                     shgProfile.setFederation_code(federationProfileEntity.getFederation_code());
                     shgProfile.setFederation_name_local(federationProfileEntity.getFederationNameLocal());
                 }
             }
-            if(shgProfileEntity.getProfileDocumentId()!=null &&
-                    shgProfileEntity.getProfileDocumentId().intValue() != 0){
+            if(shgProfileEntity.getProfile_document_id()!=null &&
+                    shgProfileEntity.getProfile_document_id().intValue() != 0){
                 DocumentDetailsEntity documentDetailsEntity =
-                        em.find(DocumentDetailsEntity.class, shgProfileEntity.getProfileDocumentId());
+                        em.find(DocumentDetailsEntity.class, shgProfileEntity.getProfile_document_id());
                 if(documentDetailsEntity!= null && documentDetailsEntity.getDocPath() !=null &&
                         !documentDetailsEntity.getDocPath().isEmpty() &&
                         documentDetailsEntity.getFrontDocModifiedName() != null &&
@@ -77,19 +94,21 @@ public class SHGDetailsService {
                 }
             }
             List<CBOPhoneNoDetails> cboPhoneNoDetailsList =
-                    fetchPhoneNumberByCboId(shgProfileEntity.getShgId(),LookUpMasterEntity.shgLookupVal);
+                    fetchPhoneNumberByCboId(shgProfileEntity.getShg_id(), LookUpMasterEntity.shgLookupVal);
             shgProfile.setCboPhoneNoDetailsList(cboPhoneNoDetailsList);
-            List<CBOAddresses> cboAddressesList = fetchAddressByCboId(shgProfileEntity.getShgId(),LookUpMasterEntity.shgLookupVal);
+            List<CBOAddresses> cboAddressesList = fetchAddressByCboId(shgProfileEntity.getShg_id(), LookUpMasterEntity.shgLookupVal);
             shgProfile.setCboAddressesList(cboAddressesList);
             List<CBOBankDetails> cboBankDetailsList =
-                    fetchByBankDetailsByCboId(shgProfileEntity.getShgId(),LookUpMasterEntity.shgLookupVal);
+                    fetchByBankDetailsByCboId(shgProfileEntity.getShg_id(), LookUpMasterEntity.shgLookupVal);
             shgProfile.setCboBankDetailsList(cboBankDetailsList);
             List<SystemTags> cboSystemTagsList =
-                    fetchSystemTagsByCboId(shgProfileEntity.getShgId());
+                    fetchSystemTagsByCboId(shgProfileEntity.getShg_id());
             shgProfile.setCboSystemTagsList(cboSystemTagsList);
             List<SHGDesignation> shgDesignationList =
-                    fetchSHGDesignationByCboId(shgProfileEntity.getShgId());
+                    fetchSHGDesignationByCboId(shgProfileEntity.getShg_id());
             shgProfile.setShgDesignationList(shgDesignationList);
+            List<MemberProfile> memberProfileList = fetchMemberProfileByCboId(shgProfileEntity.getShg_id());
+            shgProfile.setMemberProfileList(memberProfileList);
         }
         return Response
                 .status(Response.Status.OK)
@@ -99,14 +118,14 @@ public class SHGDetailsService {
     public List<CBOPhoneNoDetails> fetchPhoneNumberByCboId(BigInteger cboCode, Short cboType){
         List<CBOPhoneNoDetails> cboPhoneNoDetailsList = new ArrayList<CBOPhoneNoDetails>();
         List<CboPhoneNoDetailsEntity> cboPhoneNoDetailsEntityList =
-                cboPhoneNoDetailsRepository.fetchByCboId(cboCode,Boolean.TRUE,cboType);
+                cboPhoneNoDetailsRepository.fetchByCboId(cboCode, Boolean.TRUE, cboType);
         for (CboPhoneNoDetailsEntity cboPhoneNoDetailsEntity : cboPhoneNoDetailsEntityList) {
             CBOPhoneNoDetails cboPhoneNoDetails = GroupMapper.map(cboPhoneNoDetailsEntity);
-            if(cboPhoneNoDetailsEntity.getMemberGuid()!=null){
+            if(cboPhoneNoDetailsEntity.getMember_guid()!=null){
                 MemberProfileEntity memberProfileEntity =
-                        memberProfileRepository.fetchByGUID(cboPhoneNoDetailsEntity.getMemberGuid(),Boolean.TRUE);
+                        memberProfileRepository.fetchByGUID(cboPhoneNoDetailsEntity.getMember_guid(), Boolean.TRUE);
                 if(memberProfileEntity!=null)
-                    cboPhoneNoDetails.setMember_name(memberProfileEntity.getMemberName());
+                    cboPhoneNoDetails.setMember_name(memberProfileEntity.getMember_name());
             }
             cboPhoneNoDetailsList.add(cboPhoneNoDetails);
         }
@@ -128,10 +147,10 @@ public class SHGDetailsService {
                 cboBankDetailsRepository.fetchByCboId(cboId,Boolean.TRUE,cboType);
         for (CboBankDetailsEntity cboBankDetailsEntity : cboBankDetailsEntityList) {
             CBOBankDetails cboBankDetails = GroupMapper.map(cboBankDetailsEntity);
-            if(cboBankDetailsEntity.getBankDocumentId()!=null &&
-                    cboBankDetailsEntity.getBankDocumentId()!=bigInteger){
+            if(cboBankDetailsEntity.getBank_document_id()!=null &&
+                    cboBankDetailsEntity.getBank_document_id()!=bigInteger){
                 DocumentDetailsEntity documentDetailsEntity =
-                        em.find(DocumentDetailsEntity.class, cboBankDetailsEntity.getBankDocumentId());
+                        em.find(DocumentDetailsEntity.class, cboBankDetailsEntity.getBank_document_id());
                 if(documentDetailsEntity!= null && documentDetailsEntity.getDocPath() !=null &&
                         !documentDetailsEntity.getDocPath().isEmpty() &&
                         documentDetailsEntity.getFrontDocModifiedName() != null &&
@@ -165,12 +184,73 @@ public class SHGDetailsService {
 
             //30-3-2021 mohit
             MemberProfileEntity memberProfileEntity = memberProfileRepository.fetchByGUID(shgDesignation.getMember_guid(),Boolean.TRUE);
-            if(memberProfileEntity != null && memberProfileEntity.getMemberName() !=null){
-                shgDesignation.setMember_name(memberProfileEntity.getMemberName());
+            if(memberProfileEntity != null && memberProfileEntity.getMember_name() !=null){
+                shgDesignation.setMember_name(memberProfileEntity.getMember_name());
             }
             shgDesignationList.add(shgDesignation);
         }
         return shgDesignationList;
+    }
+    public List<MemberProfile> fetchMemberProfileByCboId(BigInteger cboId) throws ParseException {
+        this.logger.info("Inside ShgApiService->fetchMemberProfileByCboId()");
+        List<MemberProfile> memberProfileList = new ArrayList<MemberProfile>();
+        List<MemberProfileEntity> memberProfileEntityList = memberProfileRepository.fetchByCboId(cboId,Boolean.TRUE);
+        for (MemberProfileEntity memberProfileEntity :memberProfileEntityList) {
+            MemberProfile  memberProfile = null;
+            memberProfile = MemberMapper.map(memberProfileEntity);
+            List<MemberAddressesDetailsEntity> memberAddressesDetailsEntityList = memberAddressesDetailsRepository.findListByMemberCodeCboId(memberProfile.getMember_id(),memberProfile.getCbo_id());
+            if(memberAddressesDetailsEntityList != null) {
+                List<MemberAddresses> memberAddressesList = new ArrayList<>();
+                for(MemberAddressesDetailsEntity ma : memberAddressesDetailsEntityList) {
+                    if (ma.getIsActive().equals(Boolean.TRUE)) {
+                        memberAddressesList.add(MemberMapper.map(ma));
+                    }
+                }
+                memberProfile.setMemberAddressesList(memberAddressesList);
+            }
+            List<MemberBankDetailsEntity> memberBankDetailsEntityList = memberBankDetailsRepository.findListByMemberCodeCboId(memberProfile.getMember_id(),memberProfile.getCbo_id());
+            if(memberBankDetailsEntityList != null) {
+                List<MemberBank> memberBankList = new ArrayList<>();
+                for(MemberBankDetailsEntity ma : memberBankDetailsEntityList) {
+                    if (ma.getIs_active().equals(Boolean.TRUE)) {
+                        memberBankList.add(MemberMapper.map(ma));
+                    }
+                }
+                memberProfile.setMemberBankList(memberBankList);
+            }
+            List<MemberKYCDetailsEntity> memberKYCDetailsEntityList = memberKYCDetailsRepository.findByMemberCodeCboId(memberProfile.getMember_id(),memberProfile.getCbo_id());
+            if(memberKYCDetailsEntityList != null) {
+                List<MemberKYCDetails> memberKYCDetailsList = new ArrayList<>();
+                for(MemberKYCDetailsEntity ma : memberKYCDetailsEntityList) {
+                    if (ma.getIs_active().equals(Boolean.TRUE)) {
+                        memberKYCDetailsList.add(MemberMapper.map(ma));
+                    }
+                }
+                memberProfile.setMemberKYCDetailsList(memberKYCDetailsList);
+            }
+            List<MemberPhoneNoDetailsEntity> memberPhoneNoDetailsEntityList = memberPhoneNoDetailsRepository.findListByMemberCodeCboId(memberProfile.getMember_id(),memberProfile.getCbo_id());
+            if(memberPhoneNoDetailsEntityList != null) {
+                List<MemberPhoneNoDetails> memberPhoneNoDetailsList = new ArrayList<>();
+                for(MemberPhoneNoDetailsEntity ma : memberPhoneNoDetailsEntityList) {
+                    if (ma.getIs_active().equals(Boolean.TRUE)) {
+                        memberPhoneNoDetailsList.add(MemberMapper.map(ma));
+                    }
+                }
+                memberProfile.setMemberPhoneNoDetailsList(memberPhoneNoDetailsList);
+            }
+            List<MemberSystemTagsEntity> memberSystemTagsEntityList = memberSystemTagsRepository.findListByMemberCodeCboId(memberProfile.getMember_id(),memberProfile.getCbo_id());
+            if(memberSystemTagsEntityList != null) {
+                List<MemberSystemTags> memberSystemTagsList = new ArrayList<>();
+                for(MemberSystemTagsEntity ma : memberSystemTagsEntityList) {
+                    if (ma.getIs_active().equals(Boolean.TRUE)) {
+                        memberSystemTagsList.add(MemberMapper.map(ma));
+                    }
+                }
+                memberProfile.setMemberSystemTagsList(memberSystemTagsList);
+            }
+            memberProfileList.add(memberProfile);
+        }
+        return memberProfileList;
     }
 
 }

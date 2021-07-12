@@ -20,163 +20,146 @@ public class MemberProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", nullable = false)
-    private BigInteger memberId;
+    private BigInteger member_id;
     @Column(name = "member_code")
-    private BigInteger memberCode;
-    /*code add by mohit kumar start*/
+    private BigInteger member_code;
     @Column(name = "cbo_id" , nullable = false)
-    private BigInteger cboId;
+    private BigInteger cbo_id;
     @Column(name = "cbo_GUID", nullable = false)
-    private String cboGUID;
+    private String cbo_GUID;
     @Column(name = "member_GUID")
-    private String memberGUID;
+    private String member_GUID;
     @Column(name = "group_m_code")
-    private Integer groupMCode;
+    private Integer group_m_code;
     @Column(name = "seq_no")
-    private Integer seqNo;
+    private Integer seq_no;
     @Column(name = "member_name" , nullable = false)
-    private String memberName;
+    private String member_name;
     @Column(name = "member_name_local")
-    private String memberNameLocal;
+    private String member_name_local;
     @Column(name = "father_husband" , nullable = false)
-    private String fatherHusband;
+    private String father_husband;
     @Column(name = "relation_name" , nullable = false)
-    private String relationName;
+    private String relation_name;
     @Column(name = "relation_name_local")
-    private String relationNameLocal;
+    private String relation_name_local;
     @Column(name = "gender", nullable = false)
     private Short gender;
     @Column(name = "marital_status", nullable = false)
-    private Short maritalStatus;
+    private Short marital_status;
     @Column(name = "religion")
     private Short religion;
     @Column(name = "social_category")
-    private Short socialCategory;
+    private Short social_category;
     @Column(name = "tribal_category")
-    private Short tribalCategory;
+    private Short tribal_category;
     @Column(name = "bpl", nullable = false)
     private Integer bpl;
     @Column(name = "bpl_number")
-    private String bplNumber;
+    private String bpl_number;
     @Column(name = "pip_category")
-    private Short pipCategory;
+    private Short pip_category;
     @Column(name = "pip_Date")
-    //@Convert(converter = LocalDateTimeConverter.class)
-    private Date pipDate;
+    private Date pip_Date;
     @Column(name = "highest_education_level")
-    private Short highestEducationLevel;
+    private Short highest_education_level;
     @Column(name = "dob_available", nullable = false)
-    private Short dobAvailable;
+    private Short dob_available;
     @Column(name = "dob")
-    //@Convert(converter = LocalDateTimeConverter.class)
     private Date dob;
     @Column(name = "age")
     private Integer age;
     @Column(name = "age_as_on", nullable = false)
-    //@Convert(converter = LocalDateTimeConverter.class)
-    private Date ageAsOn;
+    private Date age_as_on;
     @Column(name = "minority")
     private Short minority;
     @Column(name = "is_disabled", nullable = false)
-    private  Short isDisabled;
+    private  Short is_disabled;
     @Column(name = "disability_details")
-    private  String disabilityDetails;
+    private  String disability_details;
     @Column(name = "wellbeing_category")
-    private  Short wellbeingCategory;
+    private  Short wellbeing_category;
     @Column(name = "primary_occupation")
-    private  Short primaryOccupation;
+    private  Short primary_occupation;
     @Column(name = "secondary_occupation")
-    private  Short secondaryOccupation;
+    private  Short secondary_occupation;
     @Column(name = "tertiary_occupation")
-    private  Short tertiaryOccupation;
+    private  Short tertiary_occupation;
     @Column(name = "joining_date", nullable = false)
-    private Date joiningDate;
+    private Date joining_date;
     @Column(name = "leaving_date")
-    private Date leavingDate;
+    private Date leaving_date;
     @Column(name = "reason_for_leaving")
-    private  Short reasonForLeaving;
+    private  Short reason_for_leaving;
     @Column(name = "if_minor_member_replaced")
-    private  String ifMinorMemberReplaced;
+    private  String if_minor_member_replaced;
     @Column(name = "guardian_name")
-    private  String guardianName;
+    private  String guardian_name;
     @Column(name = "guardian_name_local")
-    private  String guardianNameLocal;
+    private  String guardian_name_local;
     @Column(name = "guardian_relation")
-    private  Short guardianRelation;
+    private  Short guardian_relation;
     @Column(name = "designation", nullable = false)
     private Integer designation;
     @Column(name = "status", nullable = false)
     private Integer status;
     @Column(name = "house_hold_code")
-    private Integer houseHoldCode;
+    private Integer house_hold_code;
     @Column(name = "head_house_hold", nullable = false)
-    private Short headHouseHold;
+    private Short head_house_hold;
     @Column(name = "insurance", nullable = false)
     private Integer insurance;
     @Column(name = "marked_as_defaulter")
-    private String markedAsDefaulter;
+    private String marked_as_defaulter;
     @Column(name = "marked_as_defaulter_date")
-    //@Convert(converter = LocalDateTimeConverter.class)
-    private Date markedAsDefaulterDate;
+    private Date marked_as_defaulter_date;
     @Column(name = "record_modified")
-    private String recordModified;
+    private String record_modified;
     @Column(name = "last_sync_date")
-    private LocalDateTime lastSyncDate;
+    private LocalDateTime last_sync_date;
 
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    private Boolean is_active;
     @Column(name = "mem_activation_status")
-    private Short memActivationStatus;
+    private Short mem_activation_status;
     @Column(name = "mem_dedup_status")
-    private Short memDedupStatus;
+    private Short mem_dedup_status;
     @Column(name = "entry_source")
-    private Short entrySource;
+    private Short entry_source;
     @Column(name = "settlement_status")
-    private Short settlementStatus;
+    private Short settlement_status;
     @Column(name = "read_flag")
-    private Boolean readFlag;
+    private Boolean read_flag;
     @Column(name = "checker_remark")
-    private String checkerRemark;
+    private String checker_remark;
     @Column(name = "is_edited", nullable = false)
-    private Integer isEdited;
+    private Integer is_edited;
     @Column(name = "last_uploaded_date")
-    private LocalDateTime lastUploadedDate;
+    private LocalDateTime last_uploaded_date;
     @Column(name = "uploaded_by")
-    private String uploadedBy;
+    private String uploaded_by;
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime createdDate;
+    private LocalDateTime created_date;
     @Column(name = "created_by", nullable = false)
-    private String createdBy;
+    private String created_by;
     @Column(name = "updated_date")
-    private LocalDateTime updatedDate;
+    private LocalDateTime updated_date;
     @Column(name = "updated_by")
-    private String updatedBy;
+    private String updated_by;
     @Column(name = "member_image")
-    private String memberImage;
+    private String member_image;
 
     @Column(name = "member_profile_document_id")
-    private BigInteger memberProfileDocumentId;
+    private BigInteger member_profile_document_id;
 
     @Column(name = "approve_status")
-    private Short approveStatus;
+    private Short approve_status;
 
     @Column(name = "is_verified")
-    private Integer isVerified;
+    private Integer is_verified;
 
     @Column(name = "is_complete")
-    private Integer isComplete;
-
-
-    public static Integer stateType = 1;
-    public static Integer districtType = 2;
-    public static Integer blockType = 3;
-    public static Integer panchayatType = 4;
-    public static Integer villageType = 5;
-    public static Integer groupCodeType = 6;
-    public static Integer groupNameType = 7;
-    public static Integer memberCodeType = 8;
-    public static Integer memberNameType = 9;
-    public static Integer phoneNoType = 10;
+    private Integer is_complete;
 
 }
 

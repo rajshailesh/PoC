@@ -21,85 +21,85 @@ public class CboBankDetailsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cbo_bank_id", nullable = false)
-    private BigInteger cboBankId;
+    private BigInteger cbo_bank_id;
     @Column(name = "bank_guid")
-    private String bankGuid;
+    private String bank_guid;
     @Column(name = "cbo_guid")
-    private String cboGuid;
+    private String cbo_guid;
     @Column(name = "cbo_id", nullable = false)
-    private BigInteger cboId;
+    private BigInteger cbo_id;
     @Column(name = "account_no", nullable = false)
-    private String accountNo;
+    private String account_no;
     @Column(name = "bank_id", nullable = false)
-    private Integer bankId;
+    private Integer bank_id;
     @Column(name = "account_opening_date")
-    private Date accountOpeningDate;
+    private Date account_opening_date;
     @Column(name = "account_linkage_date")
-    private Date accountLinkageDate;
+    private Date account_linkage_date;
     @Column(name = "bank_code")
-    private String bankCode;
+    private String bank_code;
     @Column(name = "bank_branch")
-    private String bankBranch;
+    private String bank_branch;
     @Column(name = "bank_branch_id", nullable = false)
-    private BigInteger bankBranchId;
+    private BigInteger bank_branch_id;
     @Column(name = "ifsc_code", nullable = false)
-    private String ifscCode;
+    private String ifsc_code;
     @Column(name = "is_default", nullable = false)
-    private Boolean isDefault;
+    private Boolean is_default;
     @Column(name = "sequence_no", nullable = false)
-    private Integer sequenceNo;
+    private Integer sequence_no;
     @Column(name = "account_type")
-    private String accountType;
+    private String account_type;
     @Column(name = "verification")
     private Integer verification;
     @Column(name = "closure_date")
-    private Date closureDate;
+    private Date closure_date;
     @Column(name = "dedupl_status")
-    private Short deduplicationStatus;
+    private Short dedupl_status;
     @Column(name = "cbo_type")
-    private Short cboType;
+    private Short cbo_type;
     @Column(name = "activation_status")
-    private Short activationStatus;
+    private Short activation_status;
     @Column(name = "bankpassbook_name")
-    private String bankpassbookName;
+    private String bankpassbook_name;
     @Column(name = "passbook_firstpage")
-    private String passbookFirstpage;
+    private String passbook_firstpage;
     @Column(name = "status")
     private Short status;
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    private Boolean is_active;
     @Column(name = "entry_source", nullable = false)
-    private Short entrySource;
+    private Short entry_source;
     @Column(name = "is_edited", nullable = false)
-    private Integer isEdited;
+    private Integer is_edited;
     @Column(name = "last_uploaded_date")
-    private LocalDateTime lastUploadedDate;
+    private LocalDateTime last_uploaded_date;
     @Column(name = "uploaded_by")
-    private String uploadedBy;
+    private String uploaded_by;
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime createdDate;
+    private LocalDateTime created_date;
     @Column(name = "created_by", nullable = false)
-    private String createdBy;
+    private String created_by;
     @Column(name = "updated_date")
-    private LocalDateTime updatedDate;
+    private LocalDateTime updated_date;
     @Column(name = "updated_by")
-    private String updatedBy;
+    private String updated_by;
 
     @Column(name = "bank_document_id")
-    private BigInteger bankDocumentId;
+    private BigInteger bank_document_id;
 
 
     @Column(name = "identified_duplicates")
-    private String identifiedDuplicates;
+    private String identifiidentified_duplicatesedDuplicates;
     @Column(name = "npci_status")
-    private Short npciStatus;
+    private Short npci_status;
 
 
     @Column(name = "is_verified")
-    private Integer isVerified;
+    private Integer is_verified;
 
     @Column(name = "is_complete")
-    private Integer isComplete;
+    private Integer is_complete;
 
 
 }

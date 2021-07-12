@@ -16,7 +16,7 @@ import java.util.List;
 public interface CboPhoneNoDetailsRepository extends JpaRepository<CboPhoneNoDetailsEntity, BigInteger> {
 
     @Query("FROM CboPhoneNoDetailsEntity c WHERE c.cboId = :cboId AND c.isActive= :isActive AND c.cboType= :cboType")
-    List<CboPhoneNoDetailsEntity> fetchByCboId(@Param("cboId") final BigInteger cboId, @Param("isActive") final Boolean isActive,
+    List<CboPhoneNoDetailsEntity> fetchByCboId(@Param("cboId") final BigInteger cboId,@Param("isActive") final Boolean isActive,
                                                @Param("cboType") final Short cboType);
 
     @Query("FROM CboPhoneNoDetailsEntity c WHERE c.phoneGuid = :phoneGuid AND c.isActive= :isActive AND c.cboType= :cboType")
