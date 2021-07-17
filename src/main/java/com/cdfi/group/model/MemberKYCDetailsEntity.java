@@ -35,27 +35,27 @@ public class MemberKYCDetailsEntity {
      @Column(name = "document_id")
     private Integer document_id;
     @Column(name = "kyc_valid_from", nullable = false)
-    private Date kyc_valid_from;
+    private Date kycValidFrom;
     @Column(name = "kyc_valid_to", nullable = false)
-    private Date kyc_valid_to;
+    private java.util.Date kycValidTo;
     @Column(name = "status")
     private Short status;
     @Column(name = "entry_source", nullable = false)
     private Short entry_source;
     @Column(name = "is_edited", nullable = false)
-    private Integer is_edited;
+    private Integer isEdited;
     @Column(name = "is_active", nullable = false)
-    private Boolean is_active;
+    private Boolean isActive;
     @Column(name = "last_uploaded_date")
-    private LocalDateTime last_uploaded_date;
+    private LocalDateTime lastUploadedDate;
     @Column(name = "uploaded_by")
     private String uploaded_by;
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime created_date;
+    private LocalDateTime createdDate;
     @Column(name = "created_by", nullable = false)
     private String created_by;
     @Column(name = "updated_date")
-    private LocalDateTime updated_date;
+    private LocalDateTime updatedDate;
     @Column(name = "updated_by")
     private String updated_by;
     @Column(name = "cbo_id")

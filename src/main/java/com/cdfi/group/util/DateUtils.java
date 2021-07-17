@@ -1,7 +1,7 @@
 package com.cdfi.group.util;
 
 
-
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -10,49 +10,55 @@ import java.util.Date;
 
 public class DateUtils {
 
-//DATE
-public static Date secondsToDateConverter(Integer seconds){
-    if(seconds!=0 && seconds!=null){
-        long millis = seconds;
-        LocalDateTime date = LocalDateTime.ofEpochSecond(millis, 0, ZoneOffset.UTC);
-       Date out = Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
-        return out;
+    //DATE
+    public static Date secondsToDateConverter(Integer seconds) {
+        if (seconds != 0 && seconds != null) {
+            long millis = seconds;
+            LocalDateTime date = LocalDateTime.ofEpochSecond(millis, 0, ZoneOffset.UTC);
+            Date out = Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
+            return out;
+        } else
+            return null;
     }
-    else
-    return null;
-}
 
     public static Integer dateToSecondsConverter(Date date) throws ParseException {
 
         LocalDateTime dateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-        if(dateTime!=null) {
+        if (dateTime != null) {
             long ldt = dateTime.toEpochSecond(ZoneOffset.UTC);
             Integer intDate = (int) ldt;
             return intDate;
-        }
-        else
+        } else
             return 0;
 
     }
+
     //TIMESTAMP
     public static LocalDateTime secondsToTimestampConverter(Integer seconds) {
-        if(seconds!=0) {
+        if (seconds != 0) {
             long millis = seconds;
             LocalDateTime date = LocalDateTime.ofEpochSecond(millis, 0, ZoneOffset.UTC);
             return date;
-        }
-        else
-        return null;
+        } else
+            return null;
     }
 
     public static Integer timeStampToSecondsConverter(LocalDateTime dateTime) throws ParseException {
-        if(dateTime!=null) {
-        long ldt = dateTime.toEpochSecond(ZoneOffset.UTC);
-        Integer intDate = (int) ldt;
-        return intDate;
-            }
-        else
+        if (dateTime != null) {
+            long ldt = dateTime.toEpochSecond(ZoneOffset.UTC);
+            Integer intDate = (int) ldt;
+            return intDate;
+        } else
             return 0;
-        }
+    }
+
+    public static Integer timeStampToSecondsConverter(Timestamp dateTime) throws ParseException {
+        if (dateTime != null) {
+            long ldt = dateTime.getTime();
+            Integer intDate = (int) ldt;
+            return intDate;
+        } else
+            return 0;
+    }
 }

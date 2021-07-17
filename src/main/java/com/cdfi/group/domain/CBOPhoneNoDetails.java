@@ -17,7 +17,7 @@ public class CBOPhoneNoDetails {
     private Integer valid_till;
     private Short cbo_type;
     private Short status;
-    private Short deduplication_status;
+    private Short dedupl_status;
     private Short activation_status;
     private Short is_default;
     private Short entry_source;

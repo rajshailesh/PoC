@@ -13,16 +13,7 @@ import java.util.List;
 
 @Repository
 public interface MemberSystemTagsRepository extends JpaRepository<MemberSystemTagsEntity, BigInteger> {
-    @Query("FROM MemberSystemTagsEntity c WHERE c.memberCode = :memberCode and c.cboId = :cboId")
-    MemberSystemTagsEntity findByMemberCodeCboId(@Param("memberCode") final BigInteger memberCode, @Param("cboId") final BigInteger cboId);
-
-    @Query("FROM MemberSystemTagsEntity c WHERE c.cboId = :cboId and  c.memberCode = :memberCode")
+    @Query("FROM MemberSystemTagsEntity c WHERE c.cbo_id = :cboId and  c.member_code = :memberCode")
     List<MemberSystemTagsEntity> findListByMemberCodeCboId(@Param("memberCode") final BigInteger memberCode, @Param("cboId") final BigInteger cboId);
-
-    @Query("FROM MemberSystemTagsEntity c WHERE c.cboId = :cboId AND c.isActive= :isActive")
-    List<MemberSystemTagsEntity> fetchByCboId(@Param("cboId") final BigInteger cboId, @Param("isActive") final Boolean isActive);
-
-    @Query("FROM MemberSystemTagsEntity c WHERE c.systemTagGUID = :systemTagGUID AND c.isActive= :isActive")
-    MemberSystemTagsEntity fetchByGUID(@Param("systemTagGUID") final String systemTagGUID, @Param("isActive") final Boolean isActive);
 
 }

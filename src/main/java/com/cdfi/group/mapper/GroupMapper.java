@@ -4,7 +4,10 @@ import com.cdfi.group.domain.*;
 import com.cdfi.group.model.*;
 import com.cdfi.group.util.DateUtils;
 import lombok.SneakyThrows;
-import ma.glasnost.orika.*;
+import ma.glasnost.orika.CustomMapper;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 
 import java.util.Date;
@@ -14,9 +17,6 @@ public class GroupMapper {
 
     static MapperFactory mapperFactory = new DefaultMapperFactory.Builder()
             .build();
-    //static MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-
-
     //CBO PHONE NO
     public static CboPhoneNoDetailsEntity map(final CBOPhoneNoDetails cboPhoneNoDetails) {
         mapperFactory.classMap(CBOPhoneNoDetails.class, CboPhoneNoDetailsEntity.class)
@@ -24,19 +24,19 @@ public class GroupMapper {
                         new CustomMapper<CBOPhoneNoDetails, CboPhoneNoDetailsEntity>() {
                             public void mapAtoB(CBOPhoneNoDetails a, CboPhoneNoDetailsEntity b, MappingContext context) {
                                 if (a.getValid_from() != null) {
-                                    b.setValid_from(new Date(a.getValid_from()));
+                                    b.setValidFrom(new Date(a.getValid_from()));
                                 }
                                 if (a.getValid_till() != null) {
-                                    b.setValid_till(new Date(a.getValid_till()));
+                                    b.setValidTill(new Date(a.getValid_till()));
                                 }
                                 if (a.getIs_active().equals(Integer.valueOf(1)))
-                                    b.setIs_active(Boolean.TRUE);
+                                    b.setIsActive(Boolean.TRUE);
                                 else {
-                                    b.setIs_active(Boolean.FALSE);
+                                    b.setIsActive(Boolean.FALSE);
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(cboPhoneNoDetails, CboPhoneNoDetailsEntity.class);
     }
@@ -49,24 +49,31 @@ public class GroupMapper {
                         new CustomMapper<CboPhoneNoDetailsEntity, CBOPhoneNoDetails>() {
                             @SneakyThrows
                             public void mapAtoB(CboPhoneNoDetailsEntity a, CBOPhoneNoDetails b, MappingContext context) {
-                                if (a.getValid_from() != null) {
-                                    b.setValid_from(DateUtils.dateToSecondsConverter(a.getValid_from()));
+                                if (a.getValidFrom() != null) {
+                                    b.setValid_from(DateUtils.dateToSecondsConverter(a.getValidFrom()));
                                 }
-                                if (a.getValid_till() != null) {
-                                    b.setValid_till(DateUtils.dateToSecondsConverter(a.getValid_till()));
+                                if (a.getValidTill() != null) {
+                                    b.setValid_till(DateUtils.dateToSecondsConverter( a.getValidTill()));
                                 }
-                                if (a.getLast_uploaded_date() != null) {
-                                    b.setLast_uploaded_date(DateUtils.timeStampToSecondsConverter(a.getLast_uploaded_date()));
+                                if (a.getLastUploadedDate() != null) {
+                                    b.setLast_uploaded_date(DateUtils.timeStampToSecondsConverter(a.getLastUploadedDate()));
                                 }
+                                if (a.getCreatedDate() != null) {
+                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreatedDate()));
+                                }
+                                if (a.getUpdatedDate() != null) {
+                                    b.setLast_uploaded_date(DateUtils.timeStampToSecondsConverter(a.getUpdatedDate()));
+                                }
+                                b.setIs_edited(0);
 
-                                if (a.getIs_active()) {
+                                if (a.getIsActive()) {
                                     b.setIs_active(Short.valueOf((short) 1));
                                 } else {
                                     b.setIs_active(Short.valueOf((short) 0));
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(cboPhoneNoDetailsEntity, CBOPhoneNoDetails.class);
 
@@ -78,10 +85,16 @@ public class GroupMapper {
                         new CustomMapper<CboAddressesDetailsEntity, CBOAddresses>() {
                             @SneakyThrows
                             public void mapAtoB(CboAddressesDetailsEntity a, CBOAddresses b, MappingContext context) {
+                                b.setIs_edited(0);
                                 if (a.getLastUploadedDate() != null) {
                                     b.setLast_uploaded_date(DateUtils.timeStampToSecondsConverter(a.getLastUploadedDate()));
                                 }
-
+                                if (a.getCreatedDate() != null) {
+                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreatedDate()));
+                                }
+                                if (a.getUpdatedDate() != null) {
+                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdatedDate()));
+                                }
                                 if (a.getIsActive()) {
                                     b.setIs_active(Short.valueOf((short) 1));
                                 } else {
@@ -89,7 +102,7 @@ public class GroupMapper {
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(cboAddressesDetailsEntity, CBOAddresses.class);
 
@@ -102,31 +115,38 @@ public class GroupMapper {
                         new CustomMapper<CboBankDetailsEntity, CBOBankDetails>() {
                             @SneakyThrows
                             public void mapAtoB(CboBankDetailsEntity a, CBOBankDetails b, MappingContext context) {
-                                if (a.getClosure_date() != null) {
-                                    b.setClosure_date(DateUtils.dateToSecondsConverter(a.getClosure_date()));
+                                b.setIs_edited(0);
+                                if (a.getClosureDate() != null) {
+                                    b.setClosure_date(DateUtils.dateToSecondsConverter(a.getClosureDate()));
                                 }
-                                if (a.getAccount_opening_date() != null) {
-                                    b.setAccount_opening_date(DateUtils.dateToSecondsConverter(a.getAccount_opening_date()));
+                                if (a.getAccountOpeningDate() != null) {
+                                    b.setAccount_opening_date(DateUtils.dateToSecondsConverter(a.getAccountOpeningDate()));
                                 }
-                                if (a.getAccount_linkage_date() != null) {
-                                    b.setAccount_linkage_date(DateUtils.dateToSecondsConverter(a.getAccount_linkage_date()));
+                                if (a.getAccountLinkageDate() != null) {
+                                    b.setAccount_linkage_date(DateUtils.dateToSecondsConverter(a.getAccountLinkageDate()));
                                 }
-                                if (a.getLast_uploaded_date() != null) {
-                                    b.setLast_uploaded_date(DateUtils.timeStampToSecondsConverter(a.getLast_uploaded_date()));
+                                if (a.getLastUploadedDate() != null) {
+                                    b.setLast_uploaded_date(DateUtils.timeStampToSecondsConverter(a.getLastUploadedDate()));
                                 }
-                                if (a.getIs_default())
+                                if (a.getCreatedDate() != null) {
+                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreatedDate()));
+                                }
+                                if (a.getUpdatedDate() != null) {
+                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdatedDate()));
+                                }
+                                if (a.getIsDefault())
                                     b.setIs_default(Short.valueOf((short) 1));
                                 else {
                                     b.setIs_default(Short.valueOf((short) 0));
                                 }
-                                if (a.getIs_active()) {
+                                if (a.getIsActive()) {
                                     b.setIs_active(Short.valueOf((short) 1));
                                 } else {
                                     b.setIs_active(Short.valueOf((short) 0));
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(cboBankDetailsEntity, CBOBankDetails.class);
     }
@@ -140,93 +160,83 @@ public class GroupMapper {
                             @SneakyThrows
                             @Override
                             public void mapAtoB(SHGProfileEntity a, SHGProfile b, MappingContext context) {
-                                if (a.getShg_formation_date() != null) {
-                                    b.setShg_formation_date(DateUtils.dateToSecondsConverter(a.getShg_formation_date()));
+                                if (a.getShgFormationDate() != null) {
+                                    b.setShg_formation_date(DateUtils.dateToSecondsConverter(a.getShgFormationDate()));
                                 }
-
-                                //REVIVAL DATE
-                                if (a.getShg_revival_date() != null) {
-                                    b.setShg_revival_date(DateUtils.dateToSecondsConverter(a.getShg_revival_date()));
+                                if (a.getShgRevivalDate() != null) {
+                                    b.setShg_revival_date(DateUtils.dateToSecondsConverter(a.getShgRevivalDate()));
                                 }
-
-
-                                if (a.getIs_active()) {
+                                if (a.getIsActive()) {
                                     b.setIs_active(Short.valueOf((short) 1));
                                 } else {
                                     b.setIs_active(Short.valueOf((short) 0));
                                 }
-                                if (a.getAccount_books_maintained())
+                                if (a.getAccountBooksMaintained())
                                     b.setAccount_books_maintained(Short.valueOf((short) 1));
                                 else
                                     b.setAccount_books_maintained(Short.valueOf((short) 0));
 
-                                if (a.getCash_book_start_date())
+                                if (a.getCashBookStartDate())
                                     b.setCash_book_start_date(Short.valueOf((short) 1));
                                 else
                                     b.setCash_book_start_date(Short.valueOf((short) 0));
-                                if (a.getBank_book_start_date())
+                                if (a.getBankBookStartDate())
                                     b.setBank_book_start_date(Short.valueOf((short) 1));
                                 else
                                     b.setBank_book_start_date(Short.valueOf((short) 0));
-                                if (a.getMembers_ledger_start_date().equals(Boolean.TRUE))
+                                if (a.getMembersLedgerStartDate().equals(Boolean.TRUE))
                                     b.setMembers_ledger_start_date(Short.valueOf((short) 1));
                                 else
                                     b.setMembers_ledger_start_date(Short.valueOf((short) 0));
-                                if (a.getBook4())
+                                if (a.getBook_4())
                                     b.setBook4(Short.valueOf((short) 1));
                                 else
                                     b.setBook4(Short.valueOf((short) 0));
-                                if (a.getBook5().equals(Boolean.TRUE))
+                                if (a.getBook_5().equals(Boolean.TRUE))
                                     b.setBook5(Short.valueOf((short) 1));
                                 else
                                     b.setBook5(Short.valueOf((short) 0));
-                                //GRADING DONE ON
-                                if (a.getGrading_done_on() != null) {
-                                    b.setGrading_done_on(DateUtils.timeStampToSecondsConverter(a.getGrading_done_on()));
+                                if (a.getGradingDoneOn() != null) {
+                                    b.setGrading_done_on(DateUtils.timeStampToSecondsConverter(a.getGradingDoneOn()));
                                 }
-
-                                //CREATED On
-                                if (a.getCreated_date() != null) {
-                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreated_date()));
+                                if (a.getCreatedDate() != null) {
+                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreatedDate()));
                                 }
-                                if (a.getLast_uploaded_date() != null) {
-                                    b.setLast_uploaded_date(DateUtils.timeStampToSecondsConverter(a.getLast_uploaded_date()));
+                                if (a.getLastUploadedDate() != null) {
+                                    b.setLast_uploaded_date(DateUtils.timeStampToSecondsConverter(a.getLastUploadedDate()));
                                 }
-
-                                if (a.getMicro_plan_prepared())
+                                if (a.getMicroPlanPrepared())
                                     b.setMicro_plan_prepared(Short.valueOf((short) 1));
                                 else
                                     b.setMicro_plan_prepared(Short.valueOf((short) 0));
 
-                                if (a.getBasic_shg_training())
+                                if (a.getBasicShgTraining())
                                     b.setBasic_shg_training(1);
                                 else
                                     b.setBasic_shg_training(0);
-                                if (a.getShg_cooption_date() != null) {
-                                    b.setShg_cooption_date(DateUtils.dateToSecondsConverter(a.getShg_cooption_date()));
+                                if (a.getShgCooptionDate() != null) {
+                                    b.setShg_cooption_date(DateUtils.dateToSecondsConverter(a.getShgCooptionDate()));
                                 }
-
                                 b.setIs_edited(0);
-
                                 if (LookUpMasterEntity.activationLookupValPending.equals(a.getActivation_status())) {
-                                    if (LookUpMasterEntity.approveLookupValReject.equals(a.getApprove_status())) {
+                                    if (LookUpMasterEntity.approveLookupValReject.equals(a.getApproveStatus())) {
                                         b.setView_status("New(Rejected)");
                                     } else {
                                         b.setView_status("New");
                                     }
                                 } else {
-                                    if (LookUpMasterEntity.approveLookupValPending.equals(shgProfileEntity.getApprove_status())) {
+                                    if (LookUpMasterEntity.approveLookupValPending.equals(shgProfileEntity.getApproveStatus())) {
                                         b.setView_status("Modified");
-                                    } else if (LookUpMasterEntity.approveLookupValAccept.equals(shgProfileEntity.getApprove_status())) {
+                                    } else if (LookUpMasterEntity.approveLookupValAccept.equals(shgProfileEntity.getApproveStatus())) {
                                         b.setView_status("Activated");
-                                    } else if (LookUpMasterEntity.approveLookupValReject.equals(shgProfileEntity.getApprove_status())) {
+                                    } else if (LookUpMasterEntity.approveLookupValReject.equals(shgProfileEntity.getApproveStatus())) {
                                         b.setView_status("Rejected");
                                     }
                                 }
 
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(shgProfileEntity, SHGProfile.class);
     }
@@ -242,7 +252,12 @@ public class GroupMapper {
                                 if (a.getLastUploadedDate() != null) {
                                     b.setLast_uploaded_date(DateUtils.timeStampToSecondsConverter(a.getLastUploadedDate()));
                                 }
-
+                                if (a.getCreatedDate() != null) {
+                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreatedDate()));
+                                }
+                                if (a.getUpdatedDate() != null) {
+                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdatedDate()));
+                                }
                                 if (a.getIsActive()) {
                                     b.setIs_active(Short.valueOf((short) 1));
                                 } else {
@@ -250,7 +265,7 @@ public class GroupMapper {
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(systemTagsEntity, SystemTags.class);
     }
@@ -265,7 +280,21 @@ public class GroupMapper {
                                 if (a.getLastUploadedDate() != null) {
                                     b.setLast_uploaded_date(DateUtils.timeStampToSecondsConverter(a.getLastUploadedDate()));
                                 }
-
+                                if (a.getDateElection() != null) {
+                                    b.setDate_election(DateUtils.dateToSecondsConverter(a.getDateElection()));
+                                }
+                                if (a.getFromDate() != null) {
+                                    b.setFrom_date(DateUtils.dateToSecondsConverter(a.getFromDate()));
+                                }
+                                if (a.getToDate() != null) {
+                                    b.setTo_date(DateUtils.dateToSecondsConverter(a.getToDate()));
+                                }
+                                if (a.getUpdatedDate() != null) {
+                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdatedDate()));
+                                }
+                                if (a.getCreatedDate() != null) {
+                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreatedDate()));
+                                }
                                 if (a.getIsActive()) {
                                     b.setIs_active(Short.valueOf((short) 1));
                                 } else {
@@ -273,7 +302,7 @@ public class GroupMapper {
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(shgDesignationEntity, SHGDesignation.class);
     }

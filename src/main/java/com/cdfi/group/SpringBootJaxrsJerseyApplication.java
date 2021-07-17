@@ -10,4 +10,5 @@ public class SpringBootJaxrsJerseyApplication {
 		SpringApplication.run(SpringBootJaxrsJerseyApplication.class, args);
 	}
 
+
 }

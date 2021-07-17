@@ -4,6 +4,7 @@ import com.cdfi.group.domain.*;
 import com.cdfi.group.filter.JWTTokenNeeded;
 import com.cdfi.group.mapper.GroupMapper;
 import com.cdfi.group.mapper.MemberMapper;
+
 import com.cdfi.group.model.*;
 import com.cdfi.group.repository.*;
 import lombok.SneakyThrows;
@@ -70,7 +71,7 @@ public class SHGDetailsService {
         if (shgProfileEntity == null) {
             return javax.ws.rs.core.Response.status(404).build();
         }
-        if (shgProfileEntity.getIs_active()) {
+        if (shgProfileEntity.getIsActive()) {
             shgProfile = GroupMapper.map(shgProfileEntity);
             if (shgProfileEntity.getParent_cbo_code() != null) {
                 FederationProfileEntity federationProfileEntity = em.find(FederationProfileEntity.class, shgProfileEntity.getParent_cbo_code());
@@ -120,6 +121,8 @@ public class SHGDetailsService {
         List<CboPhoneNoDetailsEntity> cboPhoneNoDetailsEntityList =
                 cboPhoneNoDetailsRepository.fetchByCboId(cboCode, Boolean.TRUE, cboType);
         for (CboPhoneNoDetailsEntity cboPhoneNoDetailsEntity : cboPhoneNoDetailsEntityList) {
+
+
             CBOPhoneNoDetails cboPhoneNoDetails = GroupMapper.map(cboPhoneNoDetailsEntity);
             if(cboPhoneNoDetailsEntity.getMember_guid()!=null){
                 MemberProfileEntity memberProfileEntity =
@@ -135,6 +138,7 @@ public class SHGDetailsService {
         List<CBOAddresses> cboAddressesList = new ArrayList<CBOAddresses>();
         List<CboAddressesDetailsEntity> cboAddressesDetailsEntityList = cboAddressesDetailsRepository.fetchByCboId(cboId,Boolean.TRUE,cboType);
         for (CboAddressesDetailsEntity cboAddressesDetailsEntity : cboAddressesDetailsEntityList) {
+
             CBOAddresses cboAddresses = GroupMapper.map(cboAddressesDetailsEntity);
             cboAddressesList.add(cboAddresses);
         }
@@ -146,6 +150,7 @@ public class SHGDetailsService {
         List<CboBankDetailsEntity> cboBankDetailsEntityList =
                 cboBankDetailsRepository.fetchByCboId(cboId,Boolean.TRUE,cboType);
         for (CboBankDetailsEntity cboBankDetailsEntity : cboBankDetailsEntityList) {
+
             CBOBankDetails cboBankDetails = GroupMapper.map(cboBankDetailsEntity);
             if(cboBankDetailsEntity.getBank_document_id()!=null &&
                     cboBankDetailsEntity.getBank_document_id()!=bigInteger){
@@ -170,6 +175,7 @@ public class SHGDetailsService {
         List<SystemTagsEntity> systemTagsEntityList =
                 systemTagsRepository.fetchByCboId(cboId,Boolean.TRUE);
         for (SystemTagsEntity systemTagsEntity : systemTagsEntityList) {
+
             SystemTags systemTags = GroupMapper.map(systemTagsEntity);
             systemTagsList.add(systemTags);
         }
@@ -180,9 +186,8 @@ public class SHGDetailsService {
         List<SHGDesignationEntity> shgDesignationEntityList =
                 shgDesignationRepository.fetchByCboId(cboId,Boolean.TRUE);
         for (SHGDesignationEntity shgDesignationEntity : shgDesignationEntityList) {
-            SHGDesignation shgDesignation = GroupMapper.map(shgDesignationEntity);
 
-            //30-3-2021 mohit
+            SHGDesignation shgDesignation = GroupMapper.map(shgDesignationEntity);
             MemberProfileEntity memberProfileEntity = memberProfileRepository.fetchByGUID(shgDesignation.getMember_guid(),Boolean.TRUE);
             if(memberProfileEntity != null && memberProfileEntity.getMember_name() !=null){
                 shgDesignation.setMember_name(memberProfileEntity.getMember_name());
@@ -202,7 +207,7 @@ public class SHGDetailsService {
             if(memberAddressesDetailsEntityList != null) {
                 List<MemberAddresses> memberAddressesList = new ArrayList<>();
                 for(MemberAddressesDetailsEntity ma : memberAddressesDetailsEntityList) {
-                    if (ma.getIsActive().equals(Boolean.TRUE)) {
+                    if (ma.getIs_active().equals(Boolean.TRUE)) {
                         memberAddressesList.add(MemberMapper.map(ma));
                     }
                 }
@@ -212,7 +217,7 @@ public class SHGDetailsService {
             if(memberBankDetailsEntityList != null) {
                 List<MemberBank> memberBankList = new ArrayList<>();
                 for(MemberBankDetailsEntity ma : memberBankDetailsEntityList) {
-                    if (ma.getIs_active().equals(Boolean.TRUE)) {
+                    if (ma.getIsActive().equals(Boolean.TRUE)) {
                         memberBankList.add(MemberMapper.map(ma));
                     }
                 }
@@ -222,7 +227,7 @@ public class SHGDetailsService {
             if(memberKYCDetailsEntityList != null) {
                 List<MemberKYCDetails> memberKYCDetailsList = new ArrayList<>();
                 for(MemberKYCDetailsEntity ma : memberKYCDetailsEntityList) {
-                    if (ma.getIs_active().equals(Boolean.TRUE)) {
+                    if (ma.getIsActive().equals(Boolean.TRUE)) {
                         memberKYCDetailsList.add(MemberMapper.map(ma));
                     }
                 }
@@ -232,7 +237,7 @@ public class SHGDetailsService {
             if(memberPhoneNoDetailsEntityList != null) {
                 List<MemberPhoneNoDetails> memberPhoneNoDetailsList = new ArrayList<>();
                 for(MemberPhoneNoDetailsEntity ma : memberPhoneNoDetailsEntityList) {
-                    if (ma.getIs_active().equals(Boolean.TRUE)) {
+                    if (ma.getIsActive().equals(Boolean.TRUE)) {
                         memberPhoneNoDetailsList.add(MemberMapper.map(ma));
                     }
                 }

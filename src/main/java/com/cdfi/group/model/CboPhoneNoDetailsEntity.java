@@ -37,9 +37,9 @@ public class CboPhoneNoDetailsEntity {
     @Column(name = "phone_ownership_details")
     private String phone_ownership_details;
     @Column(name = "valid_from", nullable = false)
-    private Date valid_from;
+    private Date validFrom;
     @Column(name = "valid_till")
-    private Date valid_till;
+    private Date validTill;
     @Column(name = "is_default", nullable = false)
     private Short is_default;
     @Column(name = "dedupl_status")
@@ -49,21 +49,21 @@ public class CboPhoneNoDetailsEntity {
     @Column(name = "status")
     private Short status;
     @Column(name = "is_active", nullable = false)
-    private Boolean is_active;
+    private Boolean isActive;
     @Column(name = "entry_source", nullable = false)
     private Short entry_source;
     @Column(name = "is_edited", nullable = false)
-    private Integer is_edited;
+    private Integer isEdited;
     @Column(name = "last_uploaded_date")
-    private LocalDateTime last_uploaded_date;
+    private LocalDateTime lastUploadedDate;
     @Column(name = "uploaded_by")
     private String uploaded_by;
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime created_date;
+    private LocalDateTime createdDate;
     @Column(name = "created_by", nullable = false)
     private String created_by;
     @Column(name = "updated_date")
-    private LocalDateTime updated_date;
+    private LocalDateTime updatedDate;
     @Column(name = "updated_by")
     private String updated_by;
     @Column(name = "member_guid")

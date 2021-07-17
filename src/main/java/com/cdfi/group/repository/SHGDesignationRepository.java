@@ -13,15 +13,15 @@ import java.util.List;
 @Repository
 public interface SHGDesignationRepository extends JpaRepository<SHGDesignationEntity, BigInteger> {
 
-    @Query("FROM SHGDesignationEntity c WHERE c.cboGUID = :cboGUID")
+    @Query("FROM SHGDesignationEntity c WHERE c.cbo_guid = :cboGUID")
     SHGDesignationEntity fetchByCboGUID(@Param("cboGUID") final String cboGUID);
 
-    @Query("FROM SHGDesignationEntity c WHERE c.memberDesignationGUID = :memberDesignationGUID AND c.isActive= :isActive")
+    @Query("FROM SHGDesignationEntity c WHERE c.member_designation_guid = :memberDesignationGUID AND c.isActive= :isActive")
     SHGDesignationEntity fetchByGUID(@Param("memberDesignationGUID") final String memberDesignationGUID,
                                  @Param("isActive") final Boolean isActive);
 
 
-    @Query("FROM SHGDesignationEntity c WHERE c.cboCode = :cboCode AND c.isActive= :isActive")
+    @Query("FROM SHGDesignationEntity c WHERE c.cbo_code = :cboCode AND c.isActive= :isActive")
     List<SHGDesignationEntity> fetchByCboId(@Param("cboCode") final BigInteger cboCode,
                                         @Param("isActive") final Boolean isActive);
 }

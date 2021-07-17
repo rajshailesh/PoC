@@ -20,65 +20,65 @@ public class CboAddressesDetailsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cbo_address_id", nullable = false)
-    private BigInteger cboAddressId;
+    private BigInteger cbo_address_id;
     @Column(name = "cbo_id", nullable = false)
-    private BigInteger cboId;
+    private BigInteger cbo_id;
     @Column(name = "address_guid")
-    private String addressGuid;
+    private String address_guid;
     @Column(name = "cbo_guid")
-    private String cboGuid;
+    private String cbo_guid;
     @Column(name = "address_type")
-    private Short addressType;
+    private Short address_type;
     @Column(name = "cbo_type", nullable = false)
-    private Short cboType;
+    private Short cbo_type;
     @Column(name = "urban_rural")
-    private String urbanRural;
+    private String urban_rural;
     @Column(name = "address_line1", nullable = false)
-    private String addressLine1;
+    private String address_line1;
     @Column(name = "address_line2")
-    private String addressLine2;
+    private String address_line2;
     @Column(name = "city_town")
-    private String cityTown;
+    private String city_town;
     @Column(name = "landmark")
     private String landmark;
     @Column(name = "village_id", nullable = false)
-    private Integer villageId;
+    private Integer village_id;
     @Column(name = "panchayat_id", nullable = false)
-    private Integer panchayatId;
+    private Integer panchayat_id;
     @Column(name = "block_id", nullable = false)
-    private Integer blockId;
+    private Integer block_id;
     @Column(name = "district_id", nullable = false)
-    private Integer districtId;
+    private Integer district_id;
     @Column(name = "state_id", nullable = false)
-    private Integer stateId;
+    private Integer state_id;
     @Column(name = "postal_code", nullable = false)
-    private String postalCode;
+    private String postal_code;
     @Column(name = "status")
     private Short status;
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
     @Column(name = "entry_source", nullable = false)
-    private Short entrySource;
+    private Short entry_source;
     @Column(name = "is_edited", nullable = false)
     private Integer isEdited;
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
     @Column(name = "created_by", nullable = false)
-    private String createdBy;
+    private String created_by;
     @Column(name = "last_uploaded_date")
     private LocalDateTime lastUploadedDate;
     @Column(name = "uploaded_by")
-    private String uploadedBy;
+    private String uploaded_by;
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
     @Column(name = "updated_by")
-    private String updatedBy;
+    private String updated_by;
 
     @Column(name = "is_verified")
-    private Integer isVerified;
+    private Integer is_verified;
 
     @Column(name = "is_complete")
-    private Integer isComplete;
+    private Integer is_complete;
 
 
 }

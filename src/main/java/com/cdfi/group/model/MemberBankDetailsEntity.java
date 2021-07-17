@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigInteger;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -38,13 +39,13 @@ public class MemberBankDetailsEntity {
     @Column(name = "ifsc_code", nullable = false)
     private String ifsc_code;
     @Column(name = "account_open_date", nullable = false)
-    private Date account_open_date;
+    private Date accountOpenDate;
     @Column(name = "is_default_account", nullable = false)
     private Integer is_default_account;
     @Column(name = "status")
     private Short status;
     @Column(name = "closing_date")
-    private Date closing_date;
+    private java.util.Date closingDate;
     @Column(name = "gl_code")
     private String gl_code;
     @Column(name = "same_As_Group")
@@ -52,19 +53,19 @@ public class MemberBankDetailsEntity {
     @Column(name = "entry_source", nullable = false)
     private Short entry_source;
     @Column(name = "is_edited", nullable = false)
-    private Integer is_edited;
+    private Integer isEdited;
     @Column(name = "is_active", nullable = false)
-    private Boolean is_active;
+    private Boolean isActive;
     @Column(name = "last_uploaded_date", nullable = false)
-    private LocalDateTime last_uploaded_date;
+    private LocalDateTime lastUploadedDate;
     @Column(name = "uploaded_by", nullable = false)
     private String uploaded_by;
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime created_date;
+    private LocalDateTime createdDate;
     @Column(name = "created_by", nullable = false)
     private String created_by;
     @Column(name = "updated_date")
-    private LocalDateTime updated_date;
+    private LocalDateTime updatedDate;
     @Column(name = "updated_by")
     private String updated_by;
     @Column(name = "activation_status")

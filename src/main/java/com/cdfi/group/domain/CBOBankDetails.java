@@ -26,7 +26,7 @@ public class CBOBankDetails {
     private String bankpassbook_name;
     private String passbook_firstpage;
     private Short status;
-    private Short deduplication_status;
+    private Short dedupl_status;
     private Short activation_status;
     private Short entry_source;
     private Integer is_edited;

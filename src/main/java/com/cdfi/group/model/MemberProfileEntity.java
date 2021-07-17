@@ -26,9 +26,9 @@ public class MemberProfileEntity {
     @Column(name = "cbo_id" , nullable = false)
     private BigInteger cbo_id;
     @Column(name = "cbo_GUID", nullable = false)
-    private String cbo_GUID;
+    private String cbo_guid;
     @Column(name = "member_GUID")
-    private String member_GUID;
+    private String member_guid;
     @Column(name = "group_m_code")
     private Integer group_m_code;
     @Column(name = "seq_no")
@@ -60,17 +60,17 @@ public class MemberProfileEntity {
     @Column(name = "pip_category")
     private Short pip_category;
     @Column(name = "pip_Date")
-    private Date pip_Date;
+    private Date pipDate;
     @Column(name = "highest_education_level")
     private Short highest_education_level;
     @Column(name = "dob_available", nullable = false)
     private Short dob_available;
     @Column(name = "dob")
-    private Date dob;
+    private Date dateOfBirth;
     @Column(name = "age")
     private Integer age;
     @Column(name = "age_as_on", nullable = false)
-    private Date age_as_on;
+    private Date ageAsOn;
     @Column(name = "minority")
     private Short minority;
     @Column(name = "is_disabled", nullable = false)
@@ -86,9 +86,9 @@ public class MemberProfileEntity {
     @Column(name = "tertiary_occupation")
     private  Short tertiary_occupation;
     @Column(name = "joining_date", nullable = false)
-    private Date joining_date;
+    private Date joiningDate;
     @Column(name = "leaving_date")
-    private Date leaving_date;
+    private Date leavingDate;
     @Column(name = "reason_for_leaving")
     private  Short reason_for_leaving;
     @Column(name = "if_minor_member_replaced")
@@ -112,14 +112,14 @@ public class MemberProfileEntity {
     @Column(name = "marked_as_defaulter")
     private String marked_as_defaulter;
     @Column(name = "marked_as_defaulter_date")
-    private Date marked_as_defaulter_date;
+    private Date markedAsDefaulterDate;
     @Column(name = "record_modified")
     private String record_modified;
     @Column(name = "last_sync_date")
-    private LocalDateTime last_sync_date;
+    private LocalDateTime lastSyncDate;
 
     @Column(name = "is_active", nullable = false)
-    private Boolean is_active;
+    private Boolean isActive;
     @Column(name = "mem_activation_status")
     private Short mem_activation_status;
     @Column(name = "mem_dedup_status")
@@ -135,15 +135,15 @@ public class MemberProfileEntity {
     @Column(name = "is_edited", nullable = false)
     private Integer is_edited;
     @Column(name = "last_uploaded_date")
-    private LocalDateTime last_uploaded_date;
+    private LocalDateTime lastUploadedDate;
     @Column(name = "uploaded_by")
     private String uploaded_by;
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime created_date;
+    private LocalDateTime createdDate;
     @Column(name = "created_by", nullable = false)
     private String created_by;
     @Column(name = "updated_date")
-    private LocalDateTime updated_date;
+    private LocalDateTime updatedDate;
     @Column(name = "updated_by")
     private String updated_by;
     @Column(name = "member_image")

@@ -52,9 +52,9 @@ public class SHGProfileEntity {
     @Column(name = "shg_name_short_local ")
     private String shg_name_short_local;
     @Column(name = "shg_formation_date", nullable = false)
-    private Date shg_formation_date;
+    private java.util.Date shgFormationDate;
     @Column(name = "shg_revival_date")
-    private Date shg_revival_date;
+    private java.util.Date shgRevivalDate;
 
     @Column(name = "shg_promoted_by", nullable = false)
     private Integer shg_promoted_by;
@@ -96,21 +96,21 @@ public class SHGProfileEntity {
     @Column(name = "web_default_checker")
     private Integer web_default_checker;
     @Column(name = "account_books_maintained")
-    private Boolean account_books_maintained;
+    private Boolean accountBooksMaintained;
     @Column(name = "cash_book_start_date")
-    private Boolean cash_book_start_date;
+    private Boolean cashBookStartDate;
     @Column(name = "bank_book_start_date")
-    private Boolean bank_book_start_date;
+    private Boolean bankBookStartDate;
     @Column(name = "members_ledger_start_date")
-    private Boolean members_ledger_start_date;
+    private Boolean membersLedgerStartDate;
     @Column(name = "book4")
-    private Boolean book4;
+    private Boolean book_4;
     @Column(name = "book5")
-    private Boolean book5;
+    private Boolean book_5;
     @Column(name = "grade")
     private String grade;
     @Column(name = "grading_done_on")
-    private LocalDateTime grading_done_on;
+    private LocalDateTime gradingDoneOn;
     @Column(name = "grade_confirmation_status")
     private String grade_confirmation_status;
     @Column(name = "latitude")
@@ -120,13 +120,13 @@ public class SHGProfileEntity {
     @Column(name = "bookkeeper_identified")
     private Short bookkeeper_identified;
     @Column(name = "micro_plan_prepared")
-    private Boolean micro_plan_prepared;
+    private Boolean microPlanPrepared;
     @Column(name = "user_id")
     private String user_id;
     @Column(name = "read_flag")
     private Boolean read_flag;
     @Column(name = "basic_shg_training")
-    private Boolean basic_shg_training;
+    private Boolean basicShgTraining;
     @Column(name = "primary_activity")
     private Integer primary_activity;
     @Column(name = "secondary_activity")
@@ -158,30 +158,30 @@ public class SHGProfileEntity {
     @Column(name = "checker_remark")
     private String checker_remark;
     @Column(name = "is_active", nullable = false)
-    private Boolean is_active;
+    private Boolean isActive;
     @Column(name = "entry_source", nullable = false)
     private Short entry_source;
     @Column(name = "is_edited")
-    private Integer is_edited;
+    private Integer isEdited;
     @Column(name = "last_uploaded_date")
-    private LocalDateTime last_uploaded_date;
+    private LocalDateTime lastUploadedDate;
     @Column(name = "uploaded_by")
     private String uploaded_by;
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime created_date;
+    private LocalDateTime createdDate;
     @Column(name = "created_by", nullable = false)
     private String created_by;
     @Column(name = "updated_date")
-    private LocalDateTime updated_date;
+    private LocalDateTime updatedDate;
     @Column(name = "updated_by")
     private String updated_by;
 
     @Column(name = "shg_cooption_date")
-    private Date shg_cooption_date;
+    private Date shgCooptionDate;
     @Column(name = "tags")
     private Short tags;
     @Column(name = "approve_status")
-    private Short approve_status;
+    private Short approveStatus;
     @Column(name = "profile_document_id")
     private BigInteger profile_document_id;
     @Column(name = "shg_resolution")

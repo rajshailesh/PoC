@@ -13,18 +13,18 @@ import java.util.List;
 
 @Repository
 public interface CboBankDetailsRepository extends JpaRepository<CboBankDetailsEntity, BigInteger> {
-    @Query("FROM CboBankDetailsEntity c WHERE c.cbo_id = :cboId AND c.is_active= :isActive AND c.cbo_type = :cboType")
+    @Query("FROM CboBankDetailsEntity c WHERE c.cbo_id = :cboId AND c.isActive= :isActive AND c.cbo_type = :cboType")
     List<CboBankDetailsEntity> fetchByCboId(@Param("cboId") final BigInteger cboId,@Param("isActive") final Boolean isActive
             ,@Param("cboType") final Short cboType);
 
-    @Query("FROM CboBankDetailsEntity c WHERE c.bankGuid = :bankGuid AND c.isActive= :isActive " +
-            "AND c.cboType = :cboType")
+    @Query("FROM CboBankDetailsEntity c WHERE c.bank_guid = :bankGuid AND c.isActive= :isActive " +
+            "AND c.cbo_type = :cboType")
     CboBankDetailsEntity fetchByGUID(@Param("bankGuid") final String bankGuid,
                                      @Param("isActive") final Boolean isActive
             ,@Param("cboType") final Short cboType);
 
     @Modifying
-    @Query("update CboBankDetailsEntity u set u.is_active = :status where u.cbo_bank_id= :cboBankId")
+    @Query("update CboBankDetailsEntity u set u.isActive = :status where u.cbo_bank_id= :cboBankId")
     void deactivateCboBankDetails(@Param("status") final Boolean status,
                                   @Param("cboBankId") final BigInteger cboBankId);
 
@@ -38,19 +38,19 @@ public interface CboBankDetailsRepository extends JpaRepository<CboBankDetailsEn
                                              @Param("activationStatus") final Short activationStatus);
 
     @Query("FROM CboBankDetailsEntity c WHERE c.dedupl_status = :deduplicationStatus AND " +
-            "c.is_active= :isActive AND c.cbo_type= :cboType")
+            "c.isActive= :isActive AND c.cbo_type= :cboType")
     List<CboBankDetailsEntity> fetchCboBankDetailsByDedupStatus(@Param("deduplicationStatus") final Short deDupStatus
             ,@Param("isActive") final Boolean isActive,@Param("cboType") final Short cboType);
 
     @Query("FROM CboBankDetailsEntity c WHERE c.dedupl_status = :deduplicationStatus AND c.cbo_id= :cboId " +
-            "AND c.isActive= :isActive AND c.cboType= :cboType")
+            "AND c.isActive= :isActive AND c.cbo_type= :cboType")
     List<CboBankDetailsEntity> fetchCboBankDetailsByDedupStatusAndCboId(@Param("deduplicationStatus") final Short deDupStatus,
                                                                               @Param("cboId") final BigInteger cboId
             ,@Param("isActive") final Boolean isActive,@Param("cboType") final Short cboType);
 
 
-    @Query("FROM CboBankDetailsEntity c WHERE c.activation_status = :activationStatus AND c.is_active= :isActive " +
-            "AND c.cboType= :cboType")
+    @Query("FROM CboBankDetailsEntity c WHERE c.activation_status = :activationStatus AND c.isActive= :isActive " +
+            "AND c.cbo_type= :cboType")
     List<CboBankDetailsEntity> fetchCboBankDetailsByActivationStatus(@Param("activationStatus") final
                                                                            Short activationStatus,
                                                                      @Param("isActive") final Boolean isActive
@@ -58,19 +58,19 @@ public interface CboBankDetailsRepository extends JpaRepository<CboBankDetailsEn
 
 
     @Query("FROM CboBankDetailsEntity c WHERE c.activation_status = :activationStatus AND c.cbo_id= :cboId " +
-            "AND c.isActive= :isActive AND c.cboType= :cboType")
+            "AND c.isActive= :isActive AND c.cbo_type= :cboType")
     List<CboBankDetailsEntity> fetchCboBankDetailsByActivationStatusAndCboId(@Param("activationStatus") final Short activationStatus,
                                                                                    @Param("cboId") final BigInteger cboId
             ,@Param("isActive") final Boolean isActive,@Param("cboType") final Short cboType);
 
     @Query("select case when count(c)> 1 then true else false end from CboBankDetailsEntity c\n" +
-            "    where c.account_no= :accountNo AND c.ifsc_code= :ifscCode AND c.is_active= :isActive")
+            "    where c.account_no= :accountNo AND c.ifsc_code= :ifscCode AND c.isActive= :isActive")
     Boolean existsByAccountNoAndIfscCode(@Param("accountNo") final
                                          String accountNo,@Param("ifscCode") final String ifscCode,
                                          @Param("isActive") final Boolean isActive);
 
     @Query("select case when count(c)> 0 then true else false end from CboBankDetailsEntity c" +
-            "    where c.account_no= :accountNo AND c.ifscCode= :ifsc_code AND c.is_active= :isActive")
+            "    where c.account_no= :accountNo AND c.ifsc_code= :ifscCode AND c.isActive= :isActive")
     Boolean existsByAccountNoAndIfscCodeMember(@Param("accountNo") final
                                                String accountNo,@Param("ifscCode") final String ifscCode,
                                                @Param("isActive") final Boolean isActive);

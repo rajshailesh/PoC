@@ -15,18 +15,18 @@ import java.util.List;
 @Repository
 public interface CboAddressesDetailsRepository extends JpaRepository<CboAddressesDetailsEntity, BigInteger> {
 
-    @Query("FROM CboAddressesDetailsEntity c WHERE c.cboId = :cboId AND c.isActive= :isActive AND c.cboType= :cboType")
+    @Query("FROM CboAddressesDetailsEntity c WHERE c.cbo_id = :cboId AND c.isActive= :isActive AND c.cbo_type= :cboType")
     List<CboAddressesDetailsEntity> fetchByCboId(@Param("cboId") final BigInteger cboId,
                                                  @Param("isActive") final Boolean isActive,
                                                  @Param("cboType") final Short cboType);
 
-    @Query("FROM CboAddressesDetailsEntity c WHERE c.addressGuid = :addressGuid AND c.isActive= :isActive AND c.cboType= :cboType")
+    @Query("FROM CboAddressesDetailsEntity c WHERE c.address_guid = :addressGuid AND c.isActive= :isActive AND c.cbo_type= :cboType")
     CboAddressesDetailsEntity fetchByGUID(@Param("addressGuid") final String addressGuid,
                                           @Param("isActive") final Boolean isActive,
                                           @Param("cboType") final Short cboType);
 
     @Modifying
-    @Query("update CboAddressesDetailsEntity u set u.isActive = :status where u.cboAddressId= :cboAddressId")
+    @Query("update CboAddressesDetailsEntity u set u.isActive = :status where u.cbo_address_id= :cboAddressId")
     void deactivateCboAddressesDetails(@Param("status") final Boolean status,@Param("cboAddressId") final BigInteger cboAddressId);
 
 }

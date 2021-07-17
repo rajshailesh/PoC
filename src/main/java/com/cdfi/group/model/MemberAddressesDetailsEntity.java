@@ -30,13 +30,13 @@ public class MemberAddressesDetailsEntity {
     @Column(name = "cbo_id")
     private BigInteger cbo_id;
     @Column(name = "member_code")
-    private BigInteger memberCode;
+    private BigInteger member_code;
     @Column(name = "address_type")
-    private Short addressType;
+    private Short address_type;
     @Column(name = "address_line1", nullable = false)
-    private String addressLine1;
+    private String address_line1;
     @Column(name = "address_line2")
-    private String addressLine2;
+    private String address_line2;
     @Column(name = "village" , nullable = false)
     private Integer village;
     @Column(name = "block_id" , nullable = false)
@@ -54,29 +54,29 @@ public class MemberAddressesDetailsEntity {
     @Column(name = "status")
     private Short status;
     @Column(name = "entry_source", nullable = false)
-    private Short entrySource;
+    private Short entry_source;
     @Column(name = "is_edited", nullable = false)
-    private Integer isEdited;
+    private Integer is_edited;
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    private Boolean is_active;
     @Column(name = "last_uploaded_date")
-    private LocalDateTime lastUploadedDate;
+    private LocalDateTime last_uploaded_date;
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime createdDate;
+    private LocalDateTime created_date;
     @Column(name = "created_by", nullable = false)
-    private String createdBy;
+    private String created_by;
     @Column(name = "updated_date")
-    private LocalDateTime updatedDate;
+    private LocalDateTime updated_date;
     @Column(name = "updated_by")
-    private String updatedBy;
+    private String updated_by;
 
     @Column(name = "address_location")
-    private Short addressLocation;
+    private Short address_location;
 
     @Column(name = "is_verified")
-    private Integer isVerified;
+    private Integer is_verified;
 
     @Column(name = "is_complete")
-    private Integer isComplete;
+    private Integer is_complete;
 
 }

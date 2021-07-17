@@ -1,14 +1,18 @@
 package com.cdfi.group.domain;
 
+import com.cdfi.group.util.DateUtils;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
-public class SHGProfile {
+public class SHGProfileMM {
 
     private BigInteger shg_id;
     private Integer state_id;
@@ -121,9 +125,54 @@ public class SHGProfile {
     private Integer federation_joining_date;
     private String shg_resolution;
     private String shg_resolution_document;
+
+
     private String shg_type_other;
     private String promoter_code;
     private Integer is_verified;
     private Integer is_complete;
 
+    public void setGradingDoneOn(Timestamp dateTime){
+        try {
+            this.grading_done_on = DateUtils.timeStampToSecondsConverter(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setCreatedDate(Timestamp dateTime){
+        try {
+            this.created_date = DateUtils.timeStampToSecondsConverter(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setLastUploadedDate(Timestamp dateTime){
+        try {
+            this.last_uploaded_date = DateUtils.timeStampToSecondsConverter(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setShgFormationDate(Date dateTime){
+        try {
+            this.shg_formation_date = DateUtils.dateToSecondsConverter(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setShgRevivalDate(Date dateTime){
+        try {
+            this.shg_revival_date = DateUtils.dateToSecondsConverter(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

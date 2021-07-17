@@ -33,9 +33,9 @@ public class CboBankDetailsEntity {
     @Column(name = "bank_id", nullable = false)
     private Integer bank_id;
     @Column(name = "account_opening_date")
-    private Date account_opening_date;
+    private Date accountOpeningDate;
     @Column(name = "account_linkage_date")
-    private Date account_linkage_date;
+    private Date accountLinkageDate;
     @Column(name = "bank_code")
     private String bank_code;
     @Column(name = "bank_branch")
@@ -45,7 +45,7 @@ public class CboBankDetailsEntity {
     @Column(name = "ifsc_code", nullable = false)
     private String ifsc_code;
     @Column(name = "is_default", nullable = false)
-    private Boolean is_default;
+    private Boolean isDefault;
     @Column(name = "sequence_no", nullable = false)
     private Integer sequence_no;
     @Column(name = "account_type")
@@ -53,7 +53,7 @@ public class CboBankDetailsEntity {
     @Column(name = "verification")
     private Integer verification;
     @Column(name = "closure_date")
-    private Date closure_date;
+    private Date closureDate;
     @Column(name = "dedupl_status")
     private Short dedupl_status;
     @Column(name = "cbo_type")
@@ -67,21 +67,21 @@ public class CboBankDetailsEntity {
     @Column(name = "status")
     private Short status;
     @Column(name = "is_active", nullable = false)
-    private Boolean is_active;
+    private Boolean isActive;
     @Column(name = "entry_source", nullable = false)
     private Short entry_source;
     @Column(name = "is_edited", nullable = false)
-    private Integer is_edited;
+    private Integer isEdited;
     @Column(name = "last_uploaded_date")
-    private LocalDateTime last_uploaded_date;
+    private LocalDateTime lastUploadedDate;
     @Column(name = "uploaded_by")
     private String uploaded_by;
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime created_date;
+    private LocalDateTime createdDate;
     @Column(name = "created_by", nullable = false)
     private String created_by;
     @Column(name = "updated_date")
-    private LocalDateTime updated_date;
+    private LocalDateTime updatedDate;
     @Column(name = "updated_by")
     private String updated_by;
 

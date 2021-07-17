@@ -9,6 +9,7 @@ import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+
 import java.text.ParseException;
 import java.time.LocalDateTime;
 
@@ -21,31 +22,29 @@ public class MemberMapper {
                 .customize(
                         new CustomMapper<MemberPhoneNoDetailsEntity, MemberPhoneNoDetails>() {
                             @SneakyThrows
-                            public void mapAtoB(CboPhoneNoDetailsEntity a, CBOPhoneNoDetails b, MappingContext context) {
-                                if (a.getValid_from() != null) {
-                                    b.setValid_from(DateUtils.dateToSecondsConverter(a.getValid_from()));
+                            public void mapAtoB(MemberPhoneNoDetailsEntity a, MemberPhoneNoDetails b, MappingContext context) {
+                                b.setIs_edited(0);
+                                if (a.getValidFrom() != null) {
+                                    b.setValid_from(DateUtils.dateToSecondsConverter(a.getValidFrom()));
                                 }
-                                if (a.getValid_till() != null) {
-                                    b.setValid_till(DateUtils.dateToSecondsConverter(a.getValid_till()));
+                                if (a.getValidTill() != null) {
+                                    b.setValid_till(DateUtils.dateToSecondsConverter(a.getValidTill()));
                                 }
-                                if (a.getCreated_date() != null) {
-                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreated_date()));
+                                if (a.getCreatedDate() != null) {
+                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreatedDate()));
                                 }
-                                if (a.getUpdated_date() != null) {
-                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdated_date()));
-                                }
-                                if (a.getLast_uploaded_date() != null) {
-                                    b.setLast_uploaded_date(DateUtils.timeStampToSecondsConverter(a.getLast_uploaded_date()));
+                                if (a.getUpdatedDate() != null) {
+                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdatedDate()));
                                 }
 
-                                if (a.getIs_active()) {
+                                if (a.getIsActive()) {
                                     b.setIs_active(Short.valueOf((short) 1));
                                 } else {
                                     b.setIs_active(Short.valueOf((short) 0));
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(memberPhoneNoDetailsEntity, MemberPhoneNoDetails.class);
     }
@@ -58,23 +57,23 @@ public class MemberMapper {
                             @SneakyThrows
                             public void mapAtoB(MemberPhoneNoDetailsEntity a, MemberAddresses b, MappingContext context) {
                                 b.setIs_edited(0);
-                                if (a.getCreated_date() != null) {
-                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreated_date()));
+                                if (a.getCreatedDate() != null) {
+                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreatedDate()));
                                 }
-                                if (a.getUpdated_date() != null) {
-                                    b.setUploaded_date(DateUtils.timeStampToSecondsConverter(a.getUpdated_date()));
+                                if (a.getUpdatedDate() != null) {
+                                    b.setUploaded_date(DateUtils.timeStampToSecondsConverter(a.getUpdatedDate()));
                                 }
-                                if (a.getLast_uploaded_date() != null) {
-                                    b.setUploaded_date(DateUtils.timeStampToSecondsConverter(a.getLast_uploaded_date()));
+                                if (a.getLastUploadedDate() != null) {
+                                    b.setUploaded_date(DateUtils.timeStampToSecondsConverter(a.getLastUploadedDate()));
                                 }
-                                if (a.getIs_active()) {
+                                if (a.getIsActive()) {
                                     b.setIs_active(Short.valueOf((short) 1));
                                 } else {
                                     b.setIs_active(Short.valueOf((short) 0));
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(memberAddressesDetailsEntity, MemberAddresses.class);
 
@@ -88,29 +87,29 @@ public class MemberMapper {
                             @SneakyThrows
                             public void mapAtoB(MemberBankDetailsEntity a, MemberBank b, MappingContext context) {
                                 b.setIs_edited(0);
-                                if (a.getAccount_open_date() != null) {
-                                    b.setAccount_open_date(DateUtils.dateToSecondsConverter(a.getAccount_open_date()));
+                                if (a.getAccountOpenDate() != null) {
+                                    b.setAccount_open_date(DateUtils.dateToSecondsConverter(a.getAccountOpenDate()));
                                 }
-                                if (a.getClosing_date() != null) {
-                                    b.setClosing_date(DateUtils.dateToSecondsConverter(a.getClosing_date()));
+                                if (a.getClosingDate() != null) {
+                                    b.setClosing_date(DateUtils.dateToSecondsConverter(a.getClosingDate()));
                                 }
-                                if (a.getUpdated_date() != null) {
-                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdated_date()));
+                                if (a.getUpdatedDate() != null) {
+                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdatedDate()));
                                 }
-                                if (a.getCreated_date() != null) {
-                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreated_date()));
+                                if (a.getCreatedDate() != null) {
+                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreatedDate()));
                                 }
-                                if (a.getLast_uploaded_date() != null) {
-                                    b.setUploaded_date(DateUtils.timeStampToSecondsConverter(a.getLast_uploaded_date()));
+                                if (a.getLastUploadedDate() != null) {
+                                    b.setUploaded_date(DateUtils.timeStampToSecondsConverter(a.getLastUploadedDate()));
                                 }
-                                if (a.getIs_active()) {
+                                if (a.getIsActive()) {
                                     b.setIs_active(Short.valueOf((short) 1));
                                 } else {
                                     b.setIs_active(Short.valueOf((short) 0));
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(memberBankDetailsEntity, MemberBank.class);
     }
@@ -123,29 +122,29 @@ public class MemberMapper {
                             @SneakyThrows
                             public void mapAtoB(MemberKYCDetailsEntity a, MemberKYCDetails b, MappingContext context) {
                                 b.setIs_edited(0);
-                                if (a.getKyc_valid_from() != null) {
-                                    b.setKyc_valid_from(DateUtils.dateToSecondsConverter(a.getKyc_valid_from()));
+                                if (a.getKycValidFrom() != null) {
+                                    b.setKyc_valid_from(DateUtils.dateToSecondsConverter(a.getKycValidFrom()));
                                 }
-                                if (a.getKyc_valid_to() != null) {
-                                    b.setKyc_valid_to(DateUtils.dateToSecondsConverter(a.getKyc_valid_to()));
+                                if (a.getKycValidTo() != null) {
+                                    b.setKyc_valid_to(DateUtils.dateToSecondsConverter(a.getKycValidTo()));
                                 }
-                                if (a.getUpdated_date() != null) {
-                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdated_date()));
+                                if (a.getUpdatedDate() != null) {
+                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdatedDate()));
                                 }
-                                if (a.getCreated_date() != null) {
-                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreated_date()));
+                                if (a.getCreatedDate() != null) {
+                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreatedDate()));
                                 }
-                                if (a.getLast_uploaded_date() != null) {
-                                    b.setUploaded_date(DateUtils.timeStampToSecondsConverter(a.getLast_uploaded_date()));
+                                if (a.getLastUploadedDate() != null) {
+                                    b.setUploaded_date(DateUtils.timeStampToSecondsConverter(a.getLastUploadedDate()));
                                 }
-                                if (a.getIs_active()) {
+                                if (a.getIsActive()) {
                                     b.setIs_active(Short.valueOf((short) 1));
                                 } else {
                                     b.setIs_active(Short.valueOf((short) 0));
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(memberKYCDetailsEntity, MemberKYCDetails.class);
     }
@@ -158,43 +157,43 @@ public class MemberMapper {
                             @SneakyThrows
                             public void mapAtoB(MemberProfile a, MemberProfileEntity b, MappingContext context) {
                                 if (a.getPip_date() != null) {
-                                    b.setPip_Date(DateUtils.secondsToDateConverter(a.getPip_date()));
+                                    b.setPipDate(DateUtils.secondsToDateConverter(a.getPip_date()));
                                 }
                                 if (a.getDob() != null) {
-                                    b.setDob(DateUtils.secondsToDateConverter(a.getDob()));
+                                    b.setDateOfBirth(DateUtils.secondsToDateConverter(a.getDob()));
                                 }
                                 if (a.getAge_as_on() != null) {
-                                    b.setAge_as_on(DateUtils.secondsToDateConverter(a.getAge_as_on()));
+                                    b.setAgeAsOn(DateUtils.secondsToDateConverter(a.getAge_as_on()));
                                 }
                                 if (a.getJoining_date() != null) {
-                                    b.setJoining_date(DateUtils.secondsToDateConverter(a.getJoining_date()));
+                                    b.setJoiningDate(DateUtils.secondsToDateConverter(a.getJoining_date()));
                                 }
                                 if (a.getLeaving_date() != null) {
-                                    b.setLeaving_date(DateUtils.secondsToDateConverter(a.getLeaving_date()));
+                                    b.setLeavingDate(DateUtils.secondsToDateConverter(a.getLeaving_date()));
                                 }
                                 if (a.getMarked_as_defaulter_date() != null) {
-                                    b.setMarked_as_defaulter_date(DateUtils.secondsToDateConverter(a.getMarked_as_defaulter_date()));
+                                    b.setMarkedAsDefaulterDate(DateUtils.secondsToDateConverter(a.getMarked_as_defaulter_date()));
                                 }
                                 if (a.getLast_sync_date() != null) {
-                                    b.setLast_sync_date(DateUtils.secondsToTimestampConverter(a.getLast_sync_date()));
+                                    b.setLastSyncDate(DateUtils.secondsToTimestampConverter(a.getLast_sync_date()));
                                 }
                                 if (a.getUpdated_date() != null) {
-                                    b.setUpdated_date(DateUtils.secondsToTimestampConverter(a.getUpdated_date()));
+                                    b.setUpdatedDate(DateUtils.secondsToTimestampConverter(a.getUpdated_date()));
                                 }
                                 if (a.getCreated_date() != null) {
-                                    b.setCreated_date(DateUtils.secondsToTimestampConverter(a.getCreated_date()));
+                                    b.setCreatedDate(DateUtils.secondsToTimestampConverter(a.getCreated_date()));
                                 }
-                                b.setLast_uploaded_date(LocalDateTime.now());
+                                b.setLastUploadedDate(LocalDateTime.now());
 
 
                                 if (Short.valueOf(String.valueOf(1)).equals(a.getIs_active())) {
-                                    b.setIs_active(Boolean.TRUE);
+                                    b.setIsActive(Boolean.TRUE);
                                 } else {
-                                    b.setIs_active(Boolean.FALSE);
+                                    b.setIsActive(Boolean.FALSE);
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(memberProfile, MemberProfileEntity.class);
     }
@@ -206,37 +205,37 @@ public class MemberMapper {
                             @SneakyThrows
                             public void mapAtoB(MemberProfileEntity a, MemberProfile b, MappingContext context) {
                                 b.setIs_edited(0);
-                                if (a.getPip_Date() != null) {
-                                    b.setPip_date(DateUtils.dateToSecondsConverter(a.getPip_Date()));
+                                if (a.getPipDate() != null) {
+                                    b.setPip_date(DateUtils.dateToSecondsConverter(a.getPipDate()));
                                 }
-                                if (a.getDob() != null) {
-                                    b.setDob(DateUtils.dateToSecondsConverter(a.getDob()));
+                                if (a.getDateOfBirth() != null) {
+                                    b.setDob(DateUtils.dateToSecondsConverter(a.getDateOfBirth()));
                                 }
-                                if (a.getAge_as_on() != null) {
-                                    b.setAge_as_on(DateUtils.dateToSecondsConverter(a.getAge_as_on()));
+                                if (a.getAgeAsOn() != null) {
+                                    b.setAge_as_on(DateUtils.dateToSecondsConverter(a.getAgeAsOn()));
                                 }
-                                if (a.getJoining_date() != null) {
-                                    b.setJoining_date(DateUtils.dateToSecondsConverter(a.getJoining_date()));
+                                if (a.getJoiningDate() != null) {
+                                    b.setJoining_date(DateUtils.dateToSecondsConverter(a.getJoiningDate()));
                                 }
-                                if (a.getLeaving_date() != null) {
-                                    b.setLeaving_date(DateUtils.dateToSecondsConverter(a.getLeaving_date()));
+                                if (a.getLeavingDate() != null) {
+                                    b.setLeaving_date(DateUtils.dateToSecondsConverter(a.getLeavingDate()));
                                 }
-                                if (a.getMarked_as_defaulter_date() != null) {
-                                    b.setMarked_as_defaulter_date(DateUtils.dateToSecondsConverter(a.getMarked_as_defaulter_date()));
+                                if (a.getMarkedAsDefaulterDate() != null) {
+                                    b.setMarked_as_defaulter_date(DateUtils.dateToSecondsConverter(a.getMarkedAsDefaulterDate()));
                                 }
-                                if (a.getLast_sync_date() != null) {
-                                    b.setLast_sync_date(DateUtils.timeStampToSecondsConverter(a.getLast_sync_date()));
+                                if (a.getLastSyncDate() != null) {
+                                    b.setLast_sync_date(DateUtils.timeStampToSecondsConverter(a.getLastSyncDate()));
                                 }
-                                if (a.getUpdated_date() != null) {
-                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdated_date()));
+                                if (a.getUpdatedDate() != null) {
+                                    b.setUpdated_date(DateUtils.timeStampToSecondsConverter(a.getUpdatedDate()));
                                 }
-                                if (a.getCreated_date() != null) {
-                                    b.setUploaded_date(DateUtils.timeStampToSecondsConverter(a.getLast_uploaded_date()));
+                                if (a.getCreatedDate() != null) {
+                                    b.setUploaded_date(DateUtils.timeStampToSecondsConverter(a.getLastUploadedDate()));
                                 }
-                                if (a.getLast_uploaded_date() != null) {
-                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreated_date()));
+                                if (a.getLastUploadedDate() != null) {
+                                    b.setCreated_date(DateUtils.timeStampToSecondsConverter(a.getCreatedDate()));
                                 }
-                                if (a.getIs_active()) {
+                                if (a.getIsActive()) {
                                     b.setIs_active(Short.valueOf((short) 1));
                                 } else {
                                     b.setIs_active(Short.valueOf((short) 0));
@@ -264,7 +263,7 @@ public class MemberMapper {
 
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(memberProfileEntity, MemberProfile.class);
 
@@ -292,7 +291,7 @@ public class MemberMapper {
                                 }
                             }
                         })
-                .register();
+                .byDefault().register();
         MapperFacade mapper = mapperFactory.getMapperFacade();
         return mapper.map(memberSystemTagsEntity, MemberSystemTags.class);
 

@@ -14,11 +14,11 @@ import java.util.List;
 @Repository
 public interface SystemTagsRepository extends JpaRepository<SystemTagsEntity, BigInteger> {
 
-    @Query("FROM SystemTagsEntity c WHERE c.systemTagGUID = :systemTagGUID AND c.isActive= :isActive")
+    @Query("FROM SystemTagsEntity c WHERE c.system_tag_guid = :systemTagGUID AND c.isActive= :isActive")
     SystemTagsEntity fetchByGUID(@Param("systemTagGUID") final String systemTagGUID,
                                         @Param("isActive") final Boolean isActive);
 
-    @Query("FROM SystemTagsEntity c WHERE c.cboCode = :cboCode AND c.isActive= :isActive")
+    @Query("FROM SystemTagsEntity c WHERE c.cbo_code = :cboCode AND c.isActive= :isActive")
     List<SystemTagsEntity> fetchByCboId(@Param("cboCode") final BigInteger cboCode,
                                         @Param("isActive") final Boolean isActive);
 
